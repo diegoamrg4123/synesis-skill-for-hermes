@@ -45,6 +45,14 @@ references/
     sintaxe-e-validacao.md
 scripts/
     validate_skill.py
+    run_maintenance_tests.py
+docs/
+    PROTOCOLO_DE_MANUTENCAO.md
+    PROMPT_CRON_DIARIO.md
+tests/
+    cenarios/
+    fixtures/
+CHANGELOG_MANUTENCAO.md
 ```
 
 O `SKILL.md` contém o processo que deve estar disponível sempre. As referências são carregadas somente na fase correspondente.
@@ -175,6 +183,24 @@ Antes de criar uma versão ou enviar ao GitHub:
 9. confira os arquivos e a saída real do compilador
 
 A validação completa do comportamento exige uma sessão nova, porque o carregador de skills pode manter cache durante a sessão atual.
+
+## Manutenção experimental
+
+A manutenção usa somente fixtures sintéticos e cenários documentados em `tests/cenarios/`. Ela testa a infraestrutura e especifica verificações comportamentais para execução futura. Não executa pesquisa qualitativa real nem trata uma resposta de modelo como prova.
+
+Execute localmente:
+
+```bash
+python3 scripts/run_maintenance_tests.py
+```
+
+O executor usa biblioteca padrão, executa o validador, cria um perfil Hermes temporário, instala nele uma cópia da skill e confirma a descoberta como `synesis`, `research`, local e habilitada. Não usa credenciais nem chama modelo por API. Ele exige que o executável `hermes` esteja no `PATH`.
+
+Os cenários dos portões T, O e A são especificações de comportamento. Uma rodada futura com Hermes configurado deve guardar briefing, saída bruta e inspeção de arquivos. Essa rodada não transforma comportamento de LLM em prova automática de decisão metodológica.
+
+A manutenção trabalha exclusivamente na branch isolada `hermes/skill-improvement`. O protocolo está em `docs/PROTOCOLO_DE_MANUTENCAO.md`, e o prompt para cron futuro está em `docs/PROMPT_CRON_DIARIO.md`.
+
+O GitHub Actions executa apenas `python scripts/validate_skill.py`. O executor depende de um binário Hermes disponível no ambiente e, por isso, permanece uma verificação local sem configuração de credenciais ou chamada de modelo no CI.
 
 ## Versionamento
 

@@ -23,7 +23,7 @@ Transcrição da interação futura, rascunho integral quando houver e inspeçã
 ## Comando de validação
 
 ```text
-python scripts/run_maintenance_tests.py
+python3 scripts/run_maintenance_tests.py
 ```
 
 ## Critério de aprovação

@@ -23,7 +23,7 @@ Transcrição da interação futura, briefing usado e confirmação de que nenhu
 ## Comando de validação
 
 ```text
-python scripts/run_maintenance_tests.py
+python3 scripts/run_maintenance_tests.py
 ```
 
 ## Critério de aprovação

@@ -23,7 +23,7 @@ Saída bruta de `hermes skills list` no perfil temporário.
 ## Comando de validação
 
 ```text
-python scripts/run_maintenance_tests.py
+python3 scripts/run_maintenance_tests.py
 ```
 
 ## Critério de aprovação

@@ -15,6 +15,16 @@ REQUIRED_FILES = {
     "references/fluxos-hermes.md",
     "references/ontologia-e-chains.md",
     "references/sintaxe-e-validacao.md",
+    "docs/PROTOCOLO_DE_MANUTENCAO.md",
+    "docs/PROMPT_CRON_DIARIO.md",
+    "CHANGELOG_MANUTENCAO.md",
+    "tests/fixtures/README.md",
+    "tests/fixtures/corpus-sintetico-minimo.md",
+    "tests/cenarios/01-descoberta-da-skill.md",
+    "tests/cenarios/02-template-sem-unidade-de-analise.md",
+    "tests/cenarios/03-portao-t-template-integral.md",
+    "tests/cenarios/04-portao-o-ontologia.md",
+    "tests/cenarios/05-portao-a-piloto-de-anotacao.md",
 }
 FORBIDDEN_CHARACTERS = {
     chr(0x2013): "U+2013",

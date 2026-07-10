@@ -17,11 +17,11 @@ Procedimento:
 2. Execute `git fetch origin`. Confirme `origin/main` e confirme a branch atual `hermes/skill-improvement`.
 3. Se a branch remota de manutenção divergir da local, pare e registre bloqueio para revisão humana. Não reescreva histórico.
 4. Escolha um cenário de `tests/cenarios/` que ainda não tenha sido verificado na rodada atual.
-5. Execute primeiro `python scripts/run_maintenance_tests.py` e leia toda a saída útil.
+5. Execute primeiro `python3 scripts/run_maintenance_tests.py` e leia toda a saída útil.
 6. Use somente fixture em `tests/fixtures/`. Não faça pesquisa qualitativa real e não chame modelo por API nesta primeira camada.
 7. Inspecione arquivos relevantes e registre hipótese, cenário e evidência reproduzível.
 8. Implemente somente correção de baixo risco permitida por `docs/PROTOCOLO_DE_MANUTENCAO.md`.
-9. Após cada mudança, execute `python scripts/run_maintenance_tests.py`, `python scripts/validate_skill.py` e `git diff --check`.
+9. Após cada mudança, execute `python3 scripts/run_maintenance_tests.py`, `python3 scripts/validate_skill.py` e `git diff --check`.
 10. Atualize `CHANGELOG_MANUTENCAO.md` somente quando houver mudança real comprovada.
 11. Antes de commit, confira `git status --short` e confirme que só há arquivos do escopo.
 12. Faça commit e push somente na branch `hermes/skill-improvement`, somente quando houver mudança real, validações aprovadas e diff não vazio.

@@ -38,8 +38,8 @@ Uma correção precisa conter, no mínimo:
 - hipótese associada a um cenário identificado
 - saída bruta ou inspeção de arquivo que mostre a falha
 - diff pequeno que trate a falha observada
-- resultado aprovado de `python scripts/validate_skill.py`
-- resultado aprovado de `python scripts/run_maintenance_tests.py`
+- resultado aprovado de `python3 scripts/validate_skill.py`
+- resultado aprovado de `python3 scripts/run_maintenance_tests.py`
 - resultado aprovado de `git diff --check`
 
 Relato de agente não basta como evidência. A pessoa responsável deve conseguir ler a saída e os arquivos usados para reproduzir a conclusão.
