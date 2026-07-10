@@ -10,6 +10,7 @@ REQUIRED_FILES = {
     "README.md",
     "LICENSE",
     ".gitignore",
+    ".gitattributes",
     "references/decisoes-metodologicas.md",
     "references/ecossistema.md",
     "references/fluxos-hermes.md",

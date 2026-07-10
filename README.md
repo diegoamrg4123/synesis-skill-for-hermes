@@ -34,6 +34,7 @@ SKILL.md
 README.md
 LICENSE
 .gitignore
+.gitattributes
 .github/
     workflows/
         validate.yml
@@ -60,6 +61,9 @@ O `SKILL.md` contém o processo que deve estar disponível sempre. As referênci
 Durante o desenvolvimento local, um `AGENTS.md` ignorado pelo Git pode registrar
 instruções para o agente que mantém a skill. Esse arquivo não faz parte da
 distribuição nem da instalação usada pelo pesquisador.
+
+O `.gitattributes` preserva LF nos arquivos de texto. Isso evita falha falsa do
+validador em clones Windows com `core.autocrlf=true`, pois a skill exige LF.
 
 ## Instalação local
 

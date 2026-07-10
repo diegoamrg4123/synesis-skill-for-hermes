@@ -1,0 +1,2 @@
+# A validação da skill exige finais de linha LF em arquivos de texto.
+* text=auto eol=lf
