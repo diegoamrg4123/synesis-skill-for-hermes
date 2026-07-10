@@ -18,16 +18,17 @@ Procedimento:
 3. Se a branch remota de manutenção divergir da local, pare e registre bloqueio para revisão humana. Não reescreva histórico.
 4. Escolha um cenário de `tests/cenarios/` que ainda não tenha sido verificado na rodada atual.
 5. Execute primeiro `python3 scripts/run_maintenance_tests.py` e leia toda a saída útil.
-6. Use somente fixture em `tests/fixtures/`. Não faça pesquisa qualitativa real e não chame modelo por API nesta primeira camada.
-7. Inspecione arquivos relevantes e registre hipótese, cenário e evidência reproduzível.
-8. Implemente somente correção de baixo risco permitida por `docs/PROTOCOLO_DE_MANUTENCAO.md`.
-9. Após cada mudança, execute `python3 scripts/run_maintenance_tests.py`, `python3 scripts/validate_skill.py` e `git diff --check`.
-10. Atualize `CHANGELOG_MANUTENCAO.md` somente quando houver mudança real comprovada.
-11. Antes de commit, confira `git status --short` e confirme que só há arquivos do escopo.
-12. Faça commit e push somente na branch `hermes/skill-improvement`, somente quando houver mudança real, validações aprovadas e diff não vazio.
-13. Após push, confirme com Git que `HEAD` corresponde a `origin/hermes/skill-improvement` e que a árvore está limpa.
-14. Quando não houver mudança segura, não faça commit. Registre relatório com cenário, evidência, resultado e pendência.
-15. Quando faltar ferramenta, credencial, contexto ou decisão humana, pare e registre bloqueio. Não invente alternativa nem contorne o bloqueio.
+6. Execute o cenário escolhido nesta sessão do Hermes com a skill `synesis` carregada. Use o briefing documentado e guarde a resposta bruta como evidência.
+7. Use somente fixture em `tests/fixtures/`. Não faça pesquisa qualitativa real, não use corpus real e não trate a resposta do modelo como prova sem inspeção.
+8. Inspecione arquivos relevantes e registre hipótese, cenário e evidência reproduzível.
+9. Implemente somente correção de baixo risco permitida por `docs/PROTOCOLO_DE_MANUTENCAO.md`.
+10. Após cada mudança, execute `python3 scripts/run_maintenance_tests.py`, `python3 scripts/validate_skill.py` e `git diff --check`.
+11. Atualize `CHANGELOG_MANUTENCAO.md` somente quando houver mudança real comprovada.
+12. Antes de commit, confira `git status --short` e confirme que só há arquivos do escopo.
+13. Faça commit e push somente na branch `hermes/skill-improvement`, somente quando houver mudança real, validações aprovadas e diff não vazio.
+14. Após push, confirme com Git que `HEAD` corresponde a `origin/hermes/skill-improvement` e que a árvore está limpa.
+15. Quando não houver mudança segura, não faça commit. Registre relatório com cenário, evidência, resultado e pendência.
+16. Quando faltar ferramenta, credencial, contexto ou decisão humana, pare e registre bloqueio. Não invente alternativa nem contorne o bloqueio.
 
 Formato final do relatório:
 
