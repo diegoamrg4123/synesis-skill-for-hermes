@@ -49,6 +49,10 @@ scripts/
 
 O `SKILL.md` contém o processo que deve estar disponível sempre. As referências são carregadas somente na fase correspondente.
 
+Durante o desenvolvimento local, um `AGENTS.md` ignorado pelo Git pode registrar
+instruções para o agente que mantém a skill. Esse arquivo não faz parte da
+distribuição nem da instalação usada pelo pesquisador.
+
 ## Instalação local
 
 ### Cópia para o perfil padrão
