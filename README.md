@@ -206,3 +206,8 @@ Este repositório não é afiliado ao autor do Synesis, à organização synesis
 ## Licença
 
 Distribuída sob licença MIT. Consulte `LICENSE`.
+
+## Nota sobre a criação
+
+As primeiras versões desta skill específica para o Hermes foram feitas com o
+ChatGPT 5.6-sol no harness do Hermes Agent.
