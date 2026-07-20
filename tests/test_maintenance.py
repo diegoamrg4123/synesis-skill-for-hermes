@@ -63,6 +63,42 @@ class MaintenanceRepositoryTests(unittest.TestCase):
         self.assertIn("## 2026-07-10", changelog)
         self.assertIn("preservação de LF em clones Windows", changelog)
 
+    def test_public_docs_warn_about_the_historical_compiler_baseline(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        ecosystem = (ROOT / "references/ecossistema.md").read_text(encoding="utf-8")
+        skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+
+        for text in (readme, ecosystem, skill):
+            with self.subTest(document=text[:20]):
+                self.assertIn("0.9.0", text)
+                self.assertIn("0.7.0", text)
+                self.assertIn("0.6.0", text)
+
+    def test_graph_integration_uses_the_current_repository_name(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        ecosystem = (ROOT / "references/ecossistema.md").read_text(encoding="utf-8")
+
+        for text in (readme, ecosystem):
+            with self.subTest(document=text[:20]):
+                self.assertIn("synesis-graph", text)
+                self.assertNotIn("synesis2graph", text)
+
+        self.assertIn(
+            "https://github.com/synesis-lang/synesis-graph",
+            ecosystem,
+        )
+
+    def test_workflow_uses_read_only_permissions_and_pinned_actions(self) -> None:
+        workflow = (ROOT / ".github/workflows/validate.yml").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("permissions:\n  contents: read", workflow)
+        self.assertNotIn("actions/checkout@v4", workflow)
+        self.assertNotIn("actions/setup-python@v5", workflow)
+        self.assertRegex(workflow, r"actions/checkout@[0-9a-f]{40}")
+        self.assertRegex(workflow, r"actions/setup-python@[0-9a-f]{40}")
+
 
 if __name__ == "__main__":
     unittest.main()

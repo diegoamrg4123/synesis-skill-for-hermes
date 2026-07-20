@@ -2,7 +2,11 @@
 
 ## Compilador verificado
 
-A referência empírica desta skill é o Synesis 0.6.0. Confirme a instalação real.
+A referência empírica detalhada desta skill é o Synesis 0.6.0. Ela é uma linha de base histórica, não uma recomendação de instalação.
+
+Em 2026-07-20, a versão atual era 0.9.0. Um teste básico confirmou `--version`, `compile --help`, `init` e `compile --stats`. As afirmações específicas de 0.6.0 não foram testadas novamente uma por uma.
+
+Use pelo menos 0.7.0. Essa versão corrigiu leitura fora da pasta do projeto, leitura sem limite de tamanho e injeção de fórmulas em CSV. Se a versão instalada for anterior, pare antes de processar projeto não confiável e proponha a atualização ao pesquisador.
 
 ```bash
 python -m pip install synesis
@@ -122,9 +126,9 @@ Fluxo de controle:
 
 Nunca digite ou exponha credenciais no chat. Use configuração segura local.
 
-## `synesis2graph`
+## `synesis-graph`
 
-A integração com Neo4j ou Memgraph precisa de instalação, servidor e configuração. Confirme a ajuda da versão instalada.
+O repositório atual da integração com Neo4j ou Memgraph está em https://github.com/synesis-lang/synesis-graph. A ferramenta precisa de instalação, servidor e configuração. Confirme a ajuda da versão instalada.
 
 Trate arquivos com senha como secretos e mantenha-os fora do Git. Antes de sincronizar um grafo, explique se o modo substitui ou combina dados existentes.
 

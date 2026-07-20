@@ -246,7 +246,11 @@ Padrão seguro:
 
 Não peça a um subagente para escolher conceitos, completar lacunas do briefing ou aprovar o trabalho de outro agente. A revisão por agente encontra inconsistências, mas não substitui a revisão do pesquisador.
 
-## Regras verificadas para Synesis 0.6.0
+## Linha de base histórica do Synesis 0.6.0
+
+As regras abaixo foram testadas detalhadamente no Synesis 0.6.0. Em 2026-07-20, a versão atual era 0.9.0 e passou num teste básico com `--version`, `compile --help`, `init` e `compile --stats`.
+
+Não recomende a instalação da versão 0.6.0. Use pelo menos 0.7.0, que corrigiu leitura fora da pasta do projeto, leitura sem limite de tamanho e injeção de fórmulas em CSV. Se a versão instalada diferir da linha de base, confirme as regras abaixo por execução antes de aplicá-las ao corpus.
 
 - `check` e `validate-template` verificam sintaxe, não a semântica completa
 - a validação completa é `synesis compile projeto.synp --stats`

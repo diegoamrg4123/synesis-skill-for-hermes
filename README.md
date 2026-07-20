@@ -160,7 +160,15 @@ python -m pip install synesis
 synesis --version
 ```
 
-Ferramentas externas como `synesis-coder`, `synesis2graph` e o LSP são opcionais. As referências indicam quais afirmações foram verificadas na versão 0.6.0 do compilador e quais dependem de confirmação local.
+### Compatibilidade do compilador
+
+Em 2026-07-20, a versão atual do Synesis era 0.9.0. O caminho básico com `--version`, `compile --help`, `init` e `compile --stats` foi executado nessa versão.
+
+As regras empíricas detalhadas desta skill mantêm o Synesis 0.6.0 como linha de base histórica. Não use essa versão como recomendação de instalação. Use pelo menos 0.7.0, que corrigiu leitura fora da pasta do projeto, leitura sem limite de tamanho e injeção de fórmulas em CSV.
+
+Quando a versão instalada diferir de 0.6.0, teste novamente as afirmações detalhadas antes de aplicá-las ao corpus. A execução real e a documentação da versão instalada prevalecem.
+
+Ferramentas externas como `synesis-coder`, `synesis-graph` e o LSP são opcionais. As referências indicam quais afirmações dependem de confirmação local.
 
 ## Teste antes de publicar
 
@@ -229,13 +237,14 @@ A base técnica vem de:
 - documentação oficial do Synesis em https://synesis-lang.github.io/synesis-docs/pt/
 - organização Synesis em https://github.com/synesis-lang
 - testes empíricos locais do compilador Synesis 0.6.0
+- teste básico do compilador Synesis 0.9.0
 - documentação do Hermes Agent em https://hermes-agent.nousresearch.com/docs
 
 Quando houver conflito entre texto e execução, o comportamento observado deve ser registrado e reproduzido antes de atualizar a skill.
 
 ## Créditos
 
-Synesis foi criado por Christian M. De Britto. O projeto oficial está em https://github.com/synesis-lang/synesis e usa licença MIT.
+Synesis foi criado por Christian M. De Britto. O projeto oficial está em https://github.com/synesis-lang/synesis e usava licença MIT na versão consultada em 2026-07-20. Confira a licença da versão instalada, pois o projeto anunciou uma mudança futura.
 
 A skill agnóstica que serviu de base foi criada por Diego Amorim Goulart com apoio do Claude Fable 5 via Claude Code. Esta adaptação para Hermes Agent foi dirigida por Diego e elaborada com o Hermes Agent da Nous Research.
 
