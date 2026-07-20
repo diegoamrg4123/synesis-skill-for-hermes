@@ -108,6 +108,20 @@ def main() -> int:
         print("executavel hermes nao encontrado no PATH")
         return 1
     try:
+        run_step(
+            "testes_regressao",
+            [
+                sys.executable,
+                "-m",
+                "unittest",
+                "discover",
+                "-s",
+                "tests",
+                "-p",
+                "test_maintenance.py",
+                "-v",
+            ],
+        )
         run_step("validacao_skill", [sys.executable, "scripts/validate_skill.py"])
         check_repository_files()
         check_scenario_fixtures()

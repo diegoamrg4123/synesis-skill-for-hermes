@@ -53,6 +53,7 @@ docs/
 tests/
     cenarios/
     fixtures/
+    test_maintenance.py
 CHANGELOG_MANUTENCAO.md
 ```
 
@@ -116,10 +117,10 @@ Diretórios externos graváveis podem ser alterados pelo `skill_manage`. Se quis
 
 ## Instalação a partir do GitHub
 
-Quando este diretório virar um repositório, a forma mais previsível de instalar a skill completa, incluindo referências, será clonar o repositório dentro do diretório de skills.
+A forma mais previsível de instalar a skill completa, incluindo referências, é clonar o repositório dentro do diretório de skills.
 
 ```bash
-git clone URL_DO_REPOSITORIO "$HOME/.hermes/skills/research/synesis"
+git clone https://github.com/diegoamrg4123/synesis-skill-for-hermes.git "$HOME/.hermes/skills/research/synesis"
 ```
 
 No Windows, substitua o destino pelo `HERMES_HOME` indicado por `hermes config path` quando ele não for `~/.hermes`.
@@ -195,20 +196,23 @@ A manutenção usa somente fixtures sintéticos e cenários documentados em `tes
 Execute localmente:
 
 ```bash
+python3 -m unittest discover -s tests -p test_maintenance.py -v
 python3 scripts/run_maintenance_tests.py
 ```
 
-O executor usa biblioteca padrão, executa o validador, cria um perfil Hermes temporário, instala nele uma cópia da skill e confirma a descoberta como `synesis`, `research`, local e habilitada. Não usa credenciais nem chama modelo por API. Ele exige que o executável `hermes` esteja no `PATH`.
+Os testes de regressão verificam as regras mecânicas da manutenção. O executor usa biblioteca padrão, roda esses testes e o validador, cria um perfil Hermes temporário, instala nele uma cópia da skill e confirma a descoberta como `synesis`, `research`, local e habilitada. Não usa credenciais nem chama modelo por API. Ele exige que o executável `hermes` esteja no `PATH`.
 
 Os cenários dos portões T, O e A são especificações de comportamento. Uma rodada futura com Hermes configurado deve guardar briefing, saída bruta e inspeção de arquivos. Essa rodada não transforma comportamento de LLM em prova automática de decisão metodológica.
 
 A manutenção trabalha exclusivamente na branch isolada `hermes/skill-improvement`. O protocolo está em `docs/PROTOCOLO_DE_MANUTENCAO.md`, e o prompt para cron futuro está em `docs/PROMPT_CRON_DIARIO.md`.
 
-O GitHub Actions executa apenas `python scripts/validate_skill.py`. O executor depende de um binário Hermes disponível no ambiente e, por isso, permanece uma verificação local sem configuração de credenciais ou chamada de modelo no CI.
+O prompt usa uma rotação semanal determinística. Cada dia útil cobre um dos cinco cenários. Sábado e domingo repetem a descoberta da skill, que não depende de chamada ao modelo. Relatórios sem mudança são entregues pelo cron e não criam commit.
+
+O GitHub Actions executa os testes de regressão e `python scripts/validate_skill.py`. O executor completo depende de um binário Hermes disponível no ambiente e, por isso, a descoberta da skill permanece uma verificação local sem configuração de credenciais ou chamada de modelo no CI.
 
 ## Versionamento
 
-Este diretório está pronto para virar a raiz de um repositório Git. A criação do repositório, o primeiro commit e o remoto devem ser feitos somente quando o proprietário definir nome, descrição e URL.
+Este diretório é a raiz do repositório `synesis-skill-for-hermes`. Mudanças são preparadas em branch, validadas e revisadas antes de entrar na `main`.
 
 Versões sugeridas:
 

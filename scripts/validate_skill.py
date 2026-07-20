@@ -26,6 +26,7 @@ REQUIRED_FILES = {
     "tests/cenarios/03-portao-t-template-integral.md",
     "tests/cenarios/04-portao-o-ontologia.md",
     "tests/cenarios/05-portao-a-piloto-de-anotacao.md",
+    "tests/test_maintenance.py",
 }
 FORBIDDEN_CHARACTERS = {
     chr(0x2013): "U+2013",
@@ -56,7 +57,7 @@ STYLE_TERMS = {
 
 def text_files() -> list[Path]:
     text_suffixes = {".md", ".py", ".yml", ".yaml"}
-    text_names = {"LICENSE", ".gitignore"}
+    text_names = {"LICENSE", ".gitignore", ".gitattributes"}
     return sorted(
         path
         for path in ROOT.rglob("*")

@@ -14,5 +14,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Run maintenance regression tests
+        run: python -m unittest discover -s tests -p test_maintenance.py -v
       - name: Validate static files
         run: python scripts/validate_skill.py

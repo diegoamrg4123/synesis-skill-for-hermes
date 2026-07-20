@@ -10,14 +10,16 @@ O teste da skill não é pesquisa qualitativa real. Não usa pessoas, entrevista
 
 ## Ciclo diário
 
-1. Formular uma hipótese limitada sobre um cenário.
-2. Selecionar o cenário e o fixture sintético indicado.
+1. Selecionar pela rotação semanal um cenário e formular uma hipótese limitada.
+2. Usar o fixture sintético indicado.
 3. Executar primeiro a infraestrutura determinística disponível.
 4. Quando houver execução comportamental futura, conservar a saída bruta e os arquivos usados.
 5. Comparar a evidência com o comportamento esperado do cenário.
 6. Aplicar somente uma correção de baixo risco que seja ligada à evidência.
 7. Rodar regressão com o executor e o validador.
 8. Registrar relatório, ou changelog quando houver mudança real.
+
+A rotação está em `docs/PROMPT_CRON_DIARIO.md`. Ela impede que sessões novas escolham repetidamente o mesmo cenário por falta de histórico. Relatórios sem mudança são entregues pelo cron e não geram commit. O changelog registra somente alterações comprovadas.
 
 ## Matriz de categorias
 
@@ -39,6 +41,7 @@ Uma correção precisa conter, no mínimo:
 - saída bruta ou inspeção de arquivo que mostre a falha
 - diff pequeno que trate a falha observada
 - resultado aprovado de `python3 scripts/validate_skill.py`
+- resultado aprovado de `python3 -m unittest discover -s tests -p test_maintenance.py -v`
 - resultado aprovado de `python3 scripts/run_maintenance_tests.py`
 - resultado aprovado de `git diff --check`
 
