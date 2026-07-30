@@ -117,6 +117,19 @@ Diretórios externos graváveis podem ser alterados pelo `skill_manage`. Se quis
 
 ## Instalação a partir do GitHub
 
+### Pelo chat do Hermes
+
+Em uma conversa com o Hermes, instale a skill diretamente do repositório com:
+
+```text
+/learn https://github.com/diegoamrg4123/synesis-skill-for-hermes
+```
+
+O Hermes importa o `SKILL.md` e os arquivos de referência usados por ele. Antes
+de confirmar a instalação, confira o nome e a origem da skill. Se já houver uma
+skill `synesis` no perfil, atualize ou remova a cópia anterior para evitar
+ambiguidade de descoberta.
+
 A forma mais previsível de instalar a skill completa, incluindo referências, é clonar o repositório dentro do diretório de skills.
 
 ```bash
