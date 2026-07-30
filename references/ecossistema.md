@@ -134,9 +134,32 @@ Trate arquivos com senha como secretos e mantenha-os fora do Git. Antes de sincr
 
 ## LSP e editor
 
-A documentação menciona `synesis-lsp` e a extensão Synesis Explorer. A disponibilidade e os atalhos precisam ser conferidos no ambiente do pesquisador.
+A extensão oficial Synesis para VS Code, versão 0.9.0 no repositório consultado, requer VS Code 1.60 ou posterior. Ela cobre `.syn`, `.synt`, `.synp`, `.syno` e `.synr`. O arquivo `.synr` pertence ao pipeline ACT e recebe suporte de editor, mas não deve ser tratado como um dos cinco arquivos do projeto sem confirmar a versão e o fluxo em uso.
 
-O LSP ajuda na escrita, mas não substitui `compile --stats`.
+Antes de instalar a extensão ou o LSP, peça autorização. A instalação altera o ambiente local. Depois, confira no VS Code se a pasta aberta contém um `.synp`, se `synesis-lsp` está disponível e se o canal de saída `Synesis LSP` não relata falha de inicialização.
+
+```bash
+python -m pip install synesis synesis-lsp
+synesis-lsp --help
+```
+
+Se o executável não estiver no PATH, configure `synesisExplorer.lsp.pythonPath` com o caminho completo de `synesis-lsp`. Essa configuração, assim como `synesisExplorer.lsp.args` e `synesisExplorer.coder.path`, tem escopo de máquina. Ela não deve vir de `.vscode/settings.json` de um projeto externo.
+
+Recursos confirmados da extensão:
+
+- diagnósticos inline, autocomplete, hover, hints de autor e ano, destaque semântico e navegação entre arquivos pelo LSP
+- painéis de referências, códigos, relações, tópicos da ontologia, anotações da ontologia e campos do template
+- grafo de relações do projeto, do arquivo ativo ou do ITEM sob o cursor
+- visualização do abstract da referência ativa
+- ir à definição de um código com `F12`
+- renomear código ou referência com `F2`
+- enviar seleção de um `.syn` ao `synesis-coder` com `Ctrl+Shift+I`, somente após autorização para uso de IA e envio de corpus
+
+Os painéis de relações e de anotações aparecem ao editar `.syn`. O painel de tópicos aparece ao editar `.syno`. Uma ausência de painel pode refletir o tipo de arquivo ativo, não uma falha.
+
+O LSP e os painéis ajudam a localizar inconsistências, mas não substituem `synesis compile projeto.synp --stats`. Rode a compilação após mudança que afete o projeto inteiro, antes de exportar e antes de concluir uma correção.
+
+O comando de renomear não atravessa os portões metodológicos. Renomear um conceito exige o portão O e confirmação das definições afetadas. Renomear uma referência é mecânico, mas exige inspeção dos vínculos atualizados e compilação completa. Não aceite uma alteração em lote apenas porque o editor a aplicou sem erro.
 
 ## Zotero
 
@@ -173,6 +196,7 @@ Depois da instalação:
 
 - documentação do Synesis em https://synesis-lang.github.io/synesis-docs/pt/
 - compilador em https://github.com/synesis-lang/synesis
+- extensão Synesis para VS Code em https://github.com/synesis-lang/synesis-vscode
 - organização em https://github.com/synesis-lang
 - documentação do Hermes em https://hermes-agent.nousresearch.com/docs
 
