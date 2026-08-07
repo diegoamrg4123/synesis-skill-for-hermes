@@ -175,11 +175,13 @@ synesis --version
 
 ### Compatibilidade do compilador
 
-Em 2026-07-20, a versão atual do Synesis era 0.9.0. O caminho básico com `--version`, `compile --help`, `init` e `compile --stats` foi executado nessa versão.
+Em 2026-08-07, a versão atual do Synesis era 0.11.0. Foram executados `--version`, ajuda geral, `compile --help`, `help-field`, `export-snippets` e uma compilação multiprojeto. Também passaram 69 testes oficiais das áreas de dataset, descrição de campos, snippets e linkagem.
 
 As regras empíricas detalhadas desta skill mantêm o Synesis 0.6.0 como linha de base histórica. Não use essa versão como recomendação de instalação. Use pelo menos 0.7.0, que corrigiu leitura fora da pasta do projeto, leitura sem limite de tamanho e injeção de fórmulas em CSV.
 
-Quando a versão instalada diferir de 0.6.0, teste novamente as afirmações detalhadas antes de aplicá-las ao corpus. A execução real e a documentação da versão instalada prevalecem.
+A versão 0.10.0 introduziu datasets TOML e mudou a licença do compilador. A versão 0.11.0 acrescentou `help-field`, `export-snippets`, `SYNESIS_E086` para `VALUES` fora de `ORDERED` e `ENUMERATED`, além da exibição padrão da estrutura e da resolução das ligações multiprojeto.
+
+Quando a versão instalada diferir das versões verificadas, teste novamente as afirmações detalhadas antes de aplicá-las ao corpus. A execução real e a documentação da versão instalada prevalecem.
 
 Ferramentas externas como `synesis-coder`, `synesis-graph` e o LSP são opcionais. As referências indicam quais afirmações dependem de confirmação local.
 
@@ -250,14 +252,17 @@ A base técnica vem de:
 - documentação oficial do Synesis em https://synesis-lang.github.io/synesis-docs/pt/
 - organização Synesis em https://github.com/synesis-lang
 - testes empíricos locais do compilador Synesis 0.6.0
-- teste básico do compilador Synesis 0.9.0
+- release e código oficial do Synesis 0.10.0 e 0.11.0
+- execução local e 69 testes oficiais focados do Synesis 0.11.0
 - documentação do Hermes Agent em https://hermes-agent.nousresearch.com/docs
 
 Quando houver conflito entre texto e execução, o comportamento observado deve ser registrado e reproduzido antes de atualizar a skill.
 
 ## Créditos
 
-Synesis foi criado por Christian M. De Britto. O projeto oficial está em https://github.com/synesis-lang/synesis e usava licença MIT na versão consultada em 2026-07-20. Confira a licença da versão instalada, pois o projeto anunciou uma mudança futura.
+Synesis foi criado por Christian M. De Britto. O projeto oficial está em https://github.com/synesis-lang/synesis. As versões até 0.9.0 foram publicadas sob MIT. A partir da 0.10.0, o código-fonte declara `AGPL-3.0-only AND LicenseRef-Synesis-data-output-exception`.
+
+A Synesis Data-Output Exception separa a licença do compilador das entradas do usuário e das saídas geradas. Consulte `LICENSE`, `LICENSE.exception`, `NOTICE` e o `pyproject.toml` da versão usada antes de tomar decisão jurídica. A saída de `synesis --version` da 0.11.0 ainda contém uma mensagem de transição divergente dos arquivos de licença da própria tag.
 
 A skill agnóstica que serviu de base foi criada por Diego Amorim Goulart com apoio do Claude Fable 5 via Claude Code. Esta adaptação para Hermes Agent foi dirigida por Diego e elaborada com o Hermes Agent da Nous Research.
 
@@ -265,7 +270,7 @@ Este repositório não é afiliado ao autor do Synesis, à organização synesis
 
 ## Licença
 
-Distribuída sob licença MIT. Consulte `LICENSE`.
+A skill permanece sob licença MIT. Consulte `LICENSE`. Essa licença cobre este repositório e não altera a licença do compilador Synesis.
 
 ## Nota sobre a criação
 

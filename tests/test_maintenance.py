@@ -63,16 +63,71 @@ class MaintenanceRepositoryTests(unittest.TestCase):
         self.assertIn("## 2026-07-10", changelog)
         self.assertIn("preservação de LF em clones Windows", changelog)
 
-    def test_public_docs_warn_about_the_historical_compiler_baseline(self) -> None:
+    def test_public_docs_track_current_and_historical_compiler_versions(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        ecosystem = (ROOT / "references/ecossistema.md").read_text(encoding="utf-8")
+        skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        syntax = (ROOT / "references/sintaxe-e-validacao.md").read_text(
+            encoding="utf-8"
+        )
+
+        for text in (readme, ecosystem, skill, syntax):
+            with self.subTest(document=text[:20]):
+                self.assertIn("0.11.0", text)
+                self.assertIn("0.6.0", text)
+
+        for text in (readme, ecosystem):
+            with self.subTest(document=text[:20]):
+                self.assertIn("0.10.0", text)
+                self.assertIn("0.7.0", text)
+
+    def test_skill_documents_011_language_reference(self) -> None:
+        skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        syntax = (ROOT / "references/sintaxe-e-validacao.md").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("version: 1.1.0", skill)
+        for text in (skill, syntax):
+            with self.subTest(document=text[:20]):
+                self.assertIn("synesis help-field", text)
+                self.assertIn("synesis export-snippets", text)
+                self.assertIn("SYNESIS_E086", text)
+        self.assertIn("ORDERED` e `ENUMERATED", syntax)
+
+    def test_skill_documents_dataset_and_multiproject_workflows(self) -> None:
+        skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        ecosystem = (ROOT / "references/ecossistema.md").read_text(encoding="utf-8")
+        syntax = (ROOT / "references/sintaxe-e-validacao.md").read_text(
+            encoding="utf-8"
+        )
+
+        for marker in ("INCLUDE DATASET", "ON DATASET", "CONTEXT FROM DATASET"):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, syntax)
+
+        for marker in (
+            "IDENTIFIES",
+            "REFERS TO",
+            "Ligacao entre projetos",
+            "Resolucao das ligacoes",
+            "aguardando coleta",
+        ):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, ecosystem)
+                self.assertIn(marker, skill)
+
+    def test_skill_license_is_distinct_from_compiler_license(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         ecosystem = (ROOT / "references/ecossistema.md").read_text(encoding="utf-8")
         skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
 
-        for text in (readme, ecosystem, skill):
+        self.assertIn("license: MIT", skill)
+        self.assertIn("A skill permanece sob licença MIT", readme)
+        for text in (readme, ecosystem):
             with self.subTest(document=text[:20]):
-                self.assertIn("0.9.0", text)
-                self.assertIn("0.7.0", text)
-                self.assertIn("0.6.0", text)
+                self.assertIn("AGPL-3.0-only", text)
+                self.assertIn("Synesis Data-Output Exception", text)
 
     def test_graph_integration_uses_the_current_repository_name(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")

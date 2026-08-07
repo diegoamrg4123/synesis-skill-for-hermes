@@ -1,6 +1,6 @@
 ---
 name: synesis
-version: 1.0.0
+version: 1.1.0
 description: Use no Synesis com controle humano e automação pelo Hermes.
 author: Diego Amorim Goulart e Hermes Agent
 license: MIT
@@ -145,7 +145,8 @@ Conclusão da fase, o estado atual está descrito e nenhuma lacuna metodológica
 1. Consulte `references/sintaxe-e-validacao.md` e `references/ecossistema.md`.
 2. Confirme a versão instalada com execução real.
 3. Confira `synesis --help` e `synesis compile --help` se a versão diferir da referência desta skill.
-4. Se não houver projeto, use `synesis init` apenas para verificar o ambiente. Não use o conteúdo gerado como modelo sem revisão.
+4. Na versão 0.11.0 ou posterior, use `synesis help-field <TIPO>` para consultar propriedades obrigatórias, opcionais e proibidas antes de redigir um campo.
+5. Se não houver projeto, use `synesis init` apenas para verificar o ambiente. Não use o conteúdo gerado como modelo sem revisão.
 
 Conclusão da fase, a versão e os comandos disponíveis foram confirmados por saída real.
 
@@ -153,9 +154,11 @@ Conclusão da fase, a versão e os comandos disponíveis foram confirmados por s
 
 1. Conduza a entrevista metodológica.
 2. Passe pelo portão T.
-3. Grave `.synt` e `.synp` em UTF-8 sem BOM.
-4. Execute a compilação semântica completa.
-5. Apresente diagnósticos e impacto de qualquer correção.
+3. Consulte `synesis help-field <TIPO>` para conferir a matriz da versão instalada.
+4. Use `synesis export-snippets` somente para gerar andaimes de editor. Snippets não constituem aprovação metodológica e não substituem o portão T.
+5. Grave `.synt` e `.synp` em UTF-8 sem BOM.
+6. Execute a compilação semântica completa.
+7. Apresente diagnósticos e impacto de qualquer correção.
 
 Conclusão da fase, o template integral foi aprovado e o projeto compila sem erros.
 
@@ -178,6 +181,16 @@ Conclusão da fase, todos os conceitos gravados têm definição aprovada e fron
 
 Conclusão da fase, os vínculos bibliográficos compilam e a evidência original foi preservada.
 
+### Fase 4A, datasets estruturados
+
+1. Use `INCLUDE DATASET` apenas quando arquivos TOML forem uma origem de valores ou contexto aprovada para o projeto.
+2. Declare `REQUIRED campo ON DATASET "caminho"` ou `OPTIONAL campo ON DATASET "caminho"` no bloco `SOURCE FIELDS` ou `ITEM FIELDS`.
+3. Declare `CONTEXT FROM DATASET "seção"` dentro do bloco `FIELD`, de preferência antes de `GUIDELINES`. Não use a forma antiga dentro do bloco de campos.
+4. Não materialize no `.syn` um valor obtido por `ON DATASET` apenas para silenciar diagnóstico.
+5. Trate `SYNESIS_E085` como ausência de valor externo obrigatório. Campos opcionais ausentes não devem gerar esse erro na versão 0.10.0 ou posterior.
+
+Conclusão da fase, cada valor externo tem origem declarada, o contexto está no bloco correto e a compilação confirma os vínculos.
+
 ### Fase 5, anotação
 
 1. Defina o lote e a unidade de análise já aprovada.
@@ -197,6 +210,17 @@ Conclusão da fase, todos os itens pertencem ao lote aprovado e as exceções es
 5. Compare contagens de fontes, itens, ontologias e chains com o que foi aprovado.
 
 Conclusão da fase, a saída do comando, o código de retorno e os artefatos no disco foram conferidos.
+
+### Fase 6A, ligação multiprojeto
+
+1. Use `synesis compile p1.synp p2.synp` para ativar a ligação de dois ou mais projetos.
+2. Confirme que `IDENTIFIES` e `REFERS TO` estão em campos com `SCOPE SOURCE` e representam o mesmo rótulo de entidade.
+3. Leia `Ligacao entre projetos` como estrutura declarada nos templates e `Resolucao das ligacoes` como estado observado nos dados.
+4. Diferencie `aguardando coleta`, quando o projeto de origem não tem `SOURCE`, de `0 resolvidas`, quando há dados e nenhum valor casou.
+5. Não trate a mensagem de projetos linkados como sucesso completo quando houver rótulos sem aresta, referências órfãs ou entidade sem campo `IDENTIFIES` correspondente.
+6. Com `--stats`, confira a tabela por membro, a linha `TOTAL`, o bloco de ontologia e as contagens agregadas.
+
+Conclusão da fase, a topologia declarada, a resolução, os órfãos e as contagens foram distinguidos e verificados.
 
 ## Uso das ferramentas do Hermes
 
@@ -246,16 +270,23 @@ Padrão seguro:
 
 Não peça a um subagente para escolher conceitos, completar lacunas do briefing ou aprovar o trabalho de outro agente. A revisão por agente encontra inconsistências, mas não substitui a revisão do pesquisador.
 
-## Linha de base histórica do Synesis 0.6.0
+## Versões verificadas e linha de base histórica
 
-As regras abaixo foram testadas detalhadamente no Synesis 0.6.0. Em 2026-07-20, a versão atual era 0.9.0 e passou num teste básico com `--version`, `compile --help`, `init` e `compile --stats`.
+As regras empíricas antigas foram testadas detalhadamente no Synesis 0.6.0. Essa versão permanece como linha de base histórica, não como recomendação de instalação. A versão 0.7.0 corrigiu leitura fora da pasta do projeto, leitura sem limite de tamanho e injeção de fórmulas em CSV.
 
-Não recomende a instalação da versão 0.6.0. Use pelo menos 0.7.0, que corrigiu leitura fora da pasta do projeto, leitura sem limite de tamanho e injeção de fórmulas em CSV. Se a versão instalada diferir da linha de base, confirme as regras abaixo por execução antes de aplicá-las ao corpus.
+Em 2026-08-07, o Synesis 0.11.0 foi instalado e verificado por execução. Passaram `--version`, ajuda geral, `compile --help`, `help-field`, `export-snippets`, compilação multiprojeto e 69 testes oficiais das áreas de dataset, descrição de campos, snippets e linkagem.
+
+A versão 0.10.0 introduziu datasets TOML com `INCLUDE DATASET`, `ON DATASET` e `CONTEXT FROM DATASET`. A versão 0.11.0 introduziu `synesis help-field`, `synesis export-snippets`, o erro `SYNESIS_E086` e a exibição padrão da estrutura e da resolução das ligações multiprojeto.
+
+Use a versão atual disponível e confirme por execução antes de aplicar regras ao corpus. Preserve as observações históricas abaixo somente quando ainda forem reproduzidas na versão instalada.
 
 - `check` e `validate-template` verificam sintaxe, não a semântica completa
 - a validação completa é `synesis compile projeto.synp --stats`
 - não existe flag `--output` nem comando `export`
 - as exportações usam `--json`, `--csv`, `--xls` e `--alpaca`
+- `VALUES` só se aplica a `ORDERED` e `ENUMERATED`. Nos outros oito tipos, a versão 0.11.0 emite `SYNESIS_E086`
+- `synesis help-field <TIPO>` deriva a matriz de propriedades do validador da versão instalada
+- `synesis export-snippets -o arquivo.code-snippets` gera 10 snippets de campo na versão 0.11.0
 - valores multilinha podem ser truncados sem aviso, mantenha cada valor em uma linha
 - chain sem seta pode ser descartada sem aviso
 - projeto sem chains não gera tabela de chains

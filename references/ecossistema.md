@@ -2,20 +2,34 @@
 
 ## Compilador verificado
 
-A referência empírica detalhada desta skill é o Synesis 0.6.0. Ela é uma linha de base histórica, não uma recomendação de instalação.
+A referência empírica detalhada antiga desta skill é o Synesis 0.6.0. Ela é uma linha de base histórica, não uma recomendação de instalação.
 
-Em 2026-07-20, a versão atual era 0.9.0. Um teste básico confirmou `--version`, `compile --help`, `init` e `compile --stats`. As afirmações específicas de 0.6.0 não foram testadas novamente uma por uma.
+Em 2026-08-07, a versão 0.11.0 foi instalada com `uv tool install synesis==0.11.0`. Foram verificados `--version`, ajuda geral, `compile --help`, `help-field`, `export-snippets` e uma compilação multiprojeto. Também passaram 69 testes oficiais das áreas de dataset, descrição de campos, snippets e linkagem.
 
-Use pelo menos 0.7.0. Essa versão corrigiu leitura fora da pasta do projeto, leitura sem limite de tamanho e injeção de fórmulas em CSV. Se a versão instalada for anterior, pare antes de processar projeto não confiável e proponha a atualização ao pesquisador.
+A versão 0.10.0 introduziu datasets TOML e mudou a licença do compilador. A versão 0.11.0 acrescentou a referência executável de campos, snippets derivados, o erro `SYNESIS_E086` e a exibição da topologia multiprojeto.
+
+A versão 0.7.0 corrigiu leitura fora da pasta do projeto, leitura sem limite de tamanho e injeção de fórmulas em CSV. Se a versão instalada for anterior, pare antes de processar projeto não confiável e proponha a atualização ao pesquisador.
 
 ```bash
 python -m pip install synesis
 synesis --version
 synesis --help
 synesis compile --help
+synesis help-field CHAIN
+synesis export-snippets --help
 ```
 
 No Windows, o executável pode ficar numa pasta `Scripts` fora do PATH. Use o caminho informado pelo instalador ou ajuste o PATH. O pacote 0.6.0 não oferece `python -m synesis` como substituto garantido.
+
+## Licença do compilador
+
+As versões até 0.9.0 foram publicadas sob MIT. A partir da 0.10.0, o código-fonte declara `AGPL-3.0-only AND LicenseRef-Synesis-data-output-exception`.
+
+A Synesis Data-Output Exception informa que entradas do usuário e saídas geradas, como JSON, CSV, Excel, Alpaca JSONL e artefatos de grafo, não recebem a obrigação de copyleft apenas por terem sido processadas pelo Synesis. A AGPL continua aplicável ao compilador e aos componentes cobertos quando modificados, distribuídos ou oferecidos como serviço.
+
+A saída de `synesis --version` do pacote 0.11.0 publicado no PyPI ainda mostra uma mensagem de transição que menciona MIT e AGPL pendente. O `pyproject.toml`, `LICENSE`, `LICENSE.exception` e `NOTICE` da tag oficial v.0.11.0 registram a licença nova. Não use a linha resumida da CLI como única fonte para decisão jurídica.
+
+A licença MIT desta skill é independente da licença do compilador Synesis.
 
 ## Inicialização
 
@@ -37,6 +51,26 @@ synesis compile projeto.synp --stats
 
 Os dois primeiros comandos verificam sintaxe. O terceiro realiza a validação semântica completa.
 
+## Referência executável e snippets
+
+Na versão 0.11.0, consulte os tipos de campo e a matriz da versão instalada.
+
+```bash
+synesis help-field
+synesis help-field TEXT
+synesis help-field CHAIN
+```
+
+O comando mostra propriedades obrigatórias, opcionais e proibidas. Ele confirmou que `VALUES` só se aplica a `ORDERED` e `ENUMERATED`. Nos outros oito tipos, a propriedade produz `SYNESIS_E086`.
+
+Para gerar snippets de editor:
+
+```bash
+synesis export-snippets -o snippets/synesis.code-snippets
+```
+
+Na execução verificada, foram gerados dez snippets. O snippet de `CHAIN` continha `ARITY` e não continha `VALUES`. O arquivo gerado deve ser regenerado pelo compilador, não mantido por edição manual.
+
 ## Exportação
 
 ```bash
@@ -49,6 +83,26 @@ synesis compile projeto.synp --alpaca resultados/projeto.jsonl
 A CLI 0.6.0 não oferece `--output` nem comando `export`.
 
 A exportação pode não imprimir confirmação dos arquivos. Verifique o disco.
+
+## Ligação multiprojeto
+
+Dois ou mais caminhos `.synp` no mesmo comando ativam o link step.
+
+```bash
+synesis compile lattes.synp abstracts.synp
+synesis compile lattes.synp abstracts.synp --stats
+```
+
+`IDENTIFIES` declara o campo que identifica uma entidade. `REFERS TO` declara uma referência à mesma entidade. Os dois modificadores se aplicam a campos com `SCOPE SOURCE`.
+
+Na versão 0.11.0, a saída padrão mostra duas seções mesmo sem `--stats`.
+
+- `Ligacao entre projetos` descreve a estrutura declarada nos templates
+- `Resolucao das ligacoes` descreve quantas referências foram resolvidas nos dados
+
+Uma linha com `aguardando coleta` indica projeto de origem sem `SOURCE`. Uma linha com `0 resolvidas` indica que o projeto tem dados, mas nenhum valor casou. Referências órfãs e rótulos sem aresta precisam aparecer como pendências, mesmo que o sumário informe que os projetos foram linkados.
+
+Com `--stats`, a versão 0.11.0 mostra tabela por membro com linha `TOTAL`, bloco separado para ontologia e contagens agregadas. A coluna `Codes` deixou de ser impressa porque repetia a contagem da ontologia.
 
 ## Formatos
 
@@ -94,6 +148,7 @@ result = synesis.load(
     annotation_contents={"anotacoes.syn": annotations_text},
     ontology_contents={"ontologia.syno": ontology_text},
     bibliography_content=bib_text,
+    dataset_index=dataset_index,
 )
 
 if result.success:
@@ -106,6 +161,8 @@ else:
 `to_dataframes()` pode omitir tabelas vazias. Confira se `chains` existe no retorno antes de acessá-lo.
 
 Não existe tabela `codes` nesse retorno. Os nomes comuns são sources, items, ontologies e, quando houver dados, chains.
+
+Na versão 0.10.0 ou posterior, `dataset_index` fornece registros já carregados sem exigir leitura de arquivo pela API. O JSON v3.0 mantém uma seção `dataset` separada de `bibliography`.
 
 ## `synesis-coder`
 
@@ -196,6 +253,7 @@ Depois da instalação:
 
 - documentação do Synesis em https://synesis-lang.github.io/synesis-docs/pt/
 - compilador em https://github.com/synesis-lang/synesis
+- releases do compilador em https://github.com/synesis-lang/synesis/releases
 - extensão Synesis para VS Code em https://github.com/synesis-lang/synesis-vscode
 - organização em https://github.com/synesis-lang
 - documentação do Hermes em https://hermes-agent.nousresearch.com/docs

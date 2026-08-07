@@ -2,7 +2,7 @@
 
 ## Escopo desta referência
 
-As regras abaixo foram consolidadas para o compilador 0.6.0. Confirme a versão instalada e consulte a documentação local ou oficial quando houver diferença.
+As regras históricas abaixo foram consolidadas para o compilador 0.6.0. As mudanças de sintaxe e ajuda foram revistas contra o código oficial e a execução do Synesis 0.11.0 em 2026-08-07. Confirme a versão instalada quando houver diferença.
 
 A prova final é a execução real de `compile --stats`.
 
@@ -25,6 +25,7 @@ TEMPLATE "template.synt"
 INCLUDE BIBLIOGRAPHY "referencias.bib"
 INCLUDE ANNOTATIONS "anotacoes/entrevistas.syn"
 INCLUDE ONTOLOGY "ontologia/conceitos.syno"
+INCLUDE DATASET "dados/*.toml"
 
 METADATA
     version: 1.0
@@ -108,6 +109,15 @@ END FIELD
 
 Cada campo listado num bloco de escopo precisa de um bloco FIELD. O `SCOPE` precisa corresponder ao bloco em que o campo foi listado. Essa consistência é verificada por `compile`, não por `validate-template`.
 
+Na versão 0.11.0, consulte a matriz executável antes de escrever ou corrigir um campo.
+
+```bash
+synesis help-field
+synesis help-field CHAIN
+```
+
+O primeiro comando lista os dez tipos. O segundo informa propriedades obrigatórias, opcionais e proibidas para `CHAIN`, com os códigos de erro correspondentes.
+
 ## Tipos de campo
 
 | Tipo | Uso comum | Configuração adicional |
@@ -122,6 +132,8 @@ Cada campo listado num bloco de escopo precisa de um bloco FIELD. O `SCOPE` prec
 | ENUMERATED | Lista fechada sem ordem | VALUES obrigatório |
 | ORDERED | Lista ordenada | VALUES com índices |
 | TOPIC | Grupo de ontologia | Valor sem espaço |
+
+Na versão 0.11.0, `VALUES` só se aplica a `ORDERED` e `ENUMERATED`. Usá-lo em `QUOTATION`, `MEMO`, `CODE`, `CHAIN`, `TEXT`, `DATE`, `SCALE` ou `TOPIC` produz `SYNESIS_E086`.
 
 ## Valores fechados
 
@@ -145,6 +157,42 @@ END FIELD
 ```
 
 Cada valor precisa de descrição. Um valor sem descrição pode causar erro de sintaxe apresentado pelo `compile` como template não encontrado. Use `validate-template` para localizar o parse quebrado.
+
+## Datasets TOML
+
+O Synesis 0.10.0 adicionou datasets estruturados como origem de valores e contexto. O `.synp` inclui os arquivos.
+
+```text
+INCLUDE DATASET "dados/*.toml"
+```
+
+O bloco de campos declara a origem de cada valor.
+
+```text
+SOURCE FIELDS
+    REQUIRED researcher_id ON DATASET "informacoes_pessoais.id_lattes"
+    OPTIONAL bolsa ON DATASET "informacoes_pessoais.bolsa_produtividade"
+END SOURCE FIELDS
+```
+
+O caminho fica dentro da string. Um filtro pode usar a forma `projetos[ano_conclusao=Atual]`.
+
+`CONTEXT FROM DATASET` pertence ao bloco `FIELD`, não ao bloco `SOURCE FIELDS` ou `ITEM FIELDS`.
+
+```text
+FIELD chain TYPE CHAIN
+    SCOPE ITEM
+    ARITY >= 2
+    CONTEXT FROM DATASET "linhas_de_pesquisa", "projetos[ano_conclusao=Atual]"
+    GUIDELINES
+        Use o contexto somente conforme os critérios aprovados.
+    END GUIDELINES
+END FIELD
+```
+
+`ON DATASET` indica origem de valor. `CONTEXT FROM DATASET` fornece insumo para processar um campo. A forma antiga de `CONTEXT` dentro do bloco de campos não tem compatibilidade retroativa na 0.10.0.
+
+Um campo obrigatório sem valor no dataset produz `SYNESIS_E085`. Um campo opcional ausente não deve produzir esse erro na 0.10.0 ou posterior. O JSON v3.0 mantém a seção `dataset` separada de `bibliography`.
 
 ## Required e bundle
 
@@ -245,6 +293,8 @@ synesis --version
 synesis check anotacoes.syn
 synesis validate-template template.synt
 synesis compile projeto.synp --stats
+synesis help-field TEXT
+synesis export-snippets -o snippets/synesis.code-snippets
 ```
 
 `check` e `validate-template` verificam sintaxe. Apenas `compile --stats` faz a validação semântica completa do projeto na versão 0.6.0.
@@ -258,7 +308,30 @@ synesis compile projeto.synp --xls resultados/projeto.xlsx
 synesis compile projeto.synp --alpaca resultados/projeto.jsonl
 ```
 
-Não existe `--output` na versão 0.6.0.
+Não existe `--output` na versão 0.6.0 nem na 0.11.0.
+
+`synesis export-snippets` não exporta resultados de pesquisa. Ele gera snippets de blocos `FIELD` para editores. Na 0.11.0, o arquivo contém dez snippets derivados da matriz do validador. Trate o cabeçalho gerado como aviso para não editar o arquivo manualmente.
+
+## Ligação multiprojeto
+
+Dois ou mais projetos ativam o link step.
+
+```bash
+synesis compile lattes.synp abstracts.synp
+synesis compile lattes.synp abstracts.synp --stats
+```
+
+Um campo `IDENTIFIES researcher` declara a chave de uma entidade. Um campo `REFERS TO researcher` declara uma referência à mesma entidade. Ambos precisam ter `SCOPE SOURCE`.
+
+Na versão 0.11.0, a saída padrão inclui `Ligacao entre projetos`, derivada dos templates, e `Resolucao das ligacoes`, derivada dos dados. A estrutura pode aparecer mesmo quando o projeto de origem ainda não tem `SOURCE`.
+
+Interprete os estados separadamente.
+
+- `aguardando coleta` significa que o projeto de origem não tem `SOURCE`
+- `0 resolvidas` significa que há dados, mas nenhum valor casou
+- `N orfaos` indica valores de `REFERS TO` sem `IDENTIFIES` correspondente
+
+O sumário pode avisar que há rótulos sem nenhuma aresta. Esse aviso impede que a mensagem de projetos linkados seja lida como sucesso completo. Com `--stats`, confira a tabela por membro, a linha `TOTAL`, o bloco de ontologia e as contagens de arestas e órfãos.
 
 ## Ordem de correção
 
