@@ -185,9 +185,41 @@ Nunca digite ou exponha credenciais no chat. Use configuração segura local.
 
 ## `synesis-graph`
 
-O repositório atual da integração com Neo4j ou Memgraph está em https://github.com/synesis-lang/synesis-graph. A ferramenta precisa de instalação, servidor e configuração. Confirme a ajuda da versão instalada.
+O pipeline oficial de representações em grafo está em https://github.com/synesis-lang/synesis-graph. Em 2026-08-17 foi publicada a versão 0.7.0. A ferramenta é opcional e externa ao compilador: precisa de instalação do pacote, de um backend e, nos casos de banco, de servidor e configuração. Confirme a ajuda da versão instalada antes de prometer comandos.
 
-Trate arquivos com senha como secretos e mantenha-os fora do Git. Antes de sincronizar um grafo, explique se o modo substitui ou combina dados existentes.
+Três backends acompanham a versão 0.7.0, todos sob o mesmo contrato `BackendAdapter`.
+
+| Backend | Protocolo | Dependência Python | Infraestrutura |
+|---|---|---|---|
+| Neo4j | BOLT, porta 7687 | driver `neo4j` (extra) | servidor de banco |
+| ArcadeDB | HTTP/JSON, porta 2480 | nenhuma, só stdlib | servidor de banco |
+| HTML | sem protocolo | nenhuma | nenhuma |
+
+A interface comum se baseia em subcomandos por backend. A forma geral é:
+
+```bash
+pip install "synesis-graph[neo4j]"
+synesis-graph neo4j --project caminho/projeto.synp
+synesis-graph arcadedb --project caminho/projeto.synp
+synesis-graph html --project caminho/projeto.synp --output grafo.html
+```
+
+A configuração de credenciais e opções vive num `config.toml` na raiz do projeto usado, com seções `[neo4j]` e `[arcadedb]`. O backend HTML não exige credenciais.
+
+A versão 0.7.0 acrescentou busca semântica por embeddings vetoriais no backend ArcadeDB. Ela exige o extra opcional `embeddings`.
+
+```bash
+pip install "synesis-graph[embeddings]"
+synesis-graph arcadedb --project caminho/projeto.synp --vector-embeddings ontologia_descricao,tema
+```
+
+O nome dos campos passados em `--vector-embeddings` é validado contra o template do projeto. O modelo de embeddings é uma decisão por projeto, configurada em `[arcadedb.embeddings]` do `config.toml`, e a escolha depende do idioma do corpus. Os vetores são cacheados num arquivo lateral que deve ficar fora do Git. O backend Neo4j não suporta vetores nesta versão.
+
+Os dois backends de banco geram o mesmo grafo estrutural a partir do mesmo projeto. As métricas avançadas (PageRank, betweenness e community) vêm de motores diferentes, com Neo4j exigindo o plugin Graph Data Science e ArcadeDB usando algoritmos nativos, e os scores dos dois não são diretamente comparáveis entre si.
+
+Trate arquivos com senha como secretos e mantenha-os fora do Git. Antes de sincronizar um grafo, explique ao pesquisador se o modo substitui ou combina dados existentes no servidor, porque a repetição de uma exportação pode alterar informações já gravadas.
+
+A licença do pipeline mudou de MIT para AGPL-3.0-only com a Synesis Data-Output Exception a partir da versão que passou a cobrir os backends ArcadeDB e HTML. As versões publicadas antes permanecem sob MIT. Os grafos e o HTML gerados a partir das entradas do usuário não recebem obrigação de copyleft apenas por terem sido produzidos pela ferramenta, mas a ferramenta em si, se modificada, distribuída ou oferecida como serviço de rede, segue as obrigações da AGPL. Consulte `LICENSE` e `LICENSE.exception` da versão usada antes de decisão jurídica.
 
 ## LSP e editor
 
