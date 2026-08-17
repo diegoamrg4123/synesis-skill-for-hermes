@@ -4,6 +4,16 @@ Este arquivo registra somente mudanças reais e comprovadas na branch `hermes/sk
 
 Não adicione entrada quando uma execução diária não encontrar alteração comprovada. Nesse caso, produza apenas relatório de execução sem commit.
 
+## 2026-08-17
+
+Cenário: complemento da mudança de ecossistema após a liberação dos módulos do ecossistema no PyPI
+Hipótese: o remoto já registrava o compilador 0.11.0 e o `synesis-graph` 0.7.0, mas a atualização conjunta, o coder 0.8.0 publicado e a extensão 0.11.0 não constavam da referência
+Evidência: lançamentos oficiais `synesis 0.11.0`, `synesis-lsp 0.22.0`, `synesis-graph 0.7.0` e `synesis-coder 0.8.0`
+Arquivos alterados: referência de ecossistema, changelog e cópia instalada da skill
+Validações executadas: `python scripts/validate_skill.py`, `python -m unittest discover -s tests -p test_maintenance.py -v`, `python scripts/run_maintenance_tests.py` e `git diff --check`
+Resultado: comando de atualização conjunta documentado, extensão descrita na versão 0.11.0, exigência do `synesis-lsp` 0.22.0 para campos MEMO registrada e coder 0.8.0 descrito como publicado
+Pendências humanas: nenhuma
+
 ## 2026-07-20
 
 Cenário: revisão integral da infraestrutura e execução dos cenários 01 a 05

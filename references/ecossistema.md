@@ -19,6 +19,16 @@ synesis help-field CHAIN
 synesis export-snippets --help
 ```
 
+Quando o pesquisador quiser atualizar o conjunto de módulos do ecossistema de uma
+vez, use o comando que o desenvolvedor recomenda:
+
+```bash
+python -m pip install --upgrade synesis synesis-lsp synesis-graph synesis-coder
+```
+
+A versão instalada de cada módulo prevalece. Confirme versão e ajuda de cada
+executável antes de prometer comportamento.
+
 No Windows, o executável pode ficar numa pasta `Scripts` fora do PATH. Use o caminho informado pelo instalador ou ajuste o PATH. O pacote 0.6.0 não oferece `python -m synesis` como substituto garantido.
 
 ## Licença do compilador
@@ -183,6 +193,13 @@ Fluxo de controle:
 
 Nunca digite ou exponha credenciais no chat. Use configuração segura local.
 
+O `synesis-coder` 0.8.0 foi a primeira versão publicada no PyPI, em 2026-08-11.
+Ele oferece os modos `item`, `abstract`, `document`, `dataset` e `ontology`. O
+modo `dataset` lê dados estruturados e gera anotações Synesis a partir deles.
+Antes de orientar o uso, instale o pacote e leia `synesis-coder --help` na
+versão instalada, porque o conjunto de comandos mudou quando o pacote foi
+publicado.
+
 ## `synesis-graph`
 
 O pipeline oficial de representações em grafo está em https://github.com/synesis-lang/synesis-graph. Em 2026-08-17 foi publicada a versão 0.7.0. A ferramenta é opcional e externa ao compilador: precisa de instalação do pacote, de um backend e, nos casos de banco, de servidor e configuração. Confirme a ajuda da versão instalada antes de prometer comandos.
@@ -223,7 +240,7 @@ A licença do pipeline mudou de MIT para AGPL-3.0-only com a Synesis Data-Output
 
 ## LSP e editor
 
-A extensão oficial Synesis para VS Code, versão 0.9.0 no repositório consultado, requer VS Code 1.60 ou posterior. Ela cobre `.syn`, `.synt`, `.synp`, `.syno` e `.synr`. O arquivo `.synr` pertence ao pipeline ACT e recebe suporte de editor, mas não deve ser tratado como um dos cinco arquivos do projeto sem confirmar a versão e o fluxo em uso.
+A extensão oficial Synesis para VS Code, versão 0.11.0 no repositório consultado, requer VS Code 1.60 ou posterior. Ela cobre `.syn`, `.synt`, `.synp`, `.syno` e `.synr`. O arquivo `.synr` pertence ao pipeline ACT e recebe suporte de editor, mas não deve ser tratado como um dos cinco arquivos do projeto sem confirmar a versão e o fluxo em uso.
 
 Antes de instalar a extensão ou o LSP, peça autorização. A instalação altera o ambiente local. Depois, confira no VS Code se a pasta aberta contém um `.synp`, se `synesis-lsp` está disponível e se o canal de saída `Synesis LSP` não relata falha de inicialização.
 
@@ -231,6 +248,10 @@ Antes de instalar a extensão ou o LSP, peça autorização. A instalação alte
 python -m pip install synesis synesis-lsp
 synesis-lsp --help
 ```
+
+Para que a extensão exiba campos MEMO e QUOTATION no viewer de abstract, use
+`synesis-lsp` 0.22.0 ou posterior. Versões antigas do servidor omitiam esses
+campos sem aviso na serialização.
 
 Se o executável não estiver no PATH, configure `synesisExplorer.lsp.pythonPath` com o caminho completo de `synesis-lsp`. Essa configuração, assim como `synesisExplorer.lsp.args` e `synesisExplorer.coder.path`, tem escopo de máquina. Ela não deve vir de `.vscode/settings.json` de um projeto externo.
 
