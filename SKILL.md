@@ -1,6 +1,6 @@
 ---
 name: synesis
-version: 1.1.0
+version: 1.3.0
 description: Use no Synesis com controle humano e automação pelo Hermes.
 author: Diego Amorim Goulart e Hermes Agent
 license: MIT
@@ -155,10 +155,11 @@ Conclusão da fase, a versão e os comandos disponíveis foram confirmados por s
 1. Conduza a entrevista metodológica.
 2. Passe pelo portão T.
 3. Consulte `synesis help-field <TIPO>` para conferir a matriz da versão instalada.
-4. Use `synesis export-snippets` somente para gerar andaimes de editor. Snippets não constituem aprovação metodológica e não substituem o portão T.
-5. Grave `.synt` e `.synp` em UTF-8 sem BOM.
-6. Execute a compilação semântica completa.
-7. Apresente diagnósticos e impacto de qualquer correção.
+4. Em `ORDERED`, declare cada opção com `[N] rótulo` e grave `N` nos arquivos `.syn`, `.syno` ou campos de SOURCE. Em `ENUMERATED`, declare e grave somente o rótulo, sem `[N]`.
+5. Use `synesis export-snippets` somente para gerar andaimes de editor. Regenere o arquivo após atualizar para a versão 0.12.0, que distingue os valores de `ORDERED` e `ENUMERATED`. Snippets não constituem aprovação metodológica e não substituem o portão T.
+6. Grave `.synt` e `.synp` em UTF-8 sem BOM.
+7. Execute a compilação semântica completa.
+8. Apresente diagnósticos e impacto de qualquer correção.
 
 Conclusão da fase, o template integral foi aprovado e o projeto compila sem erros.
 
@@ -167,8 +168,10 @@ Conclusão da fase, o template integral foi aprovado e o projeto compila sem err
 1. Pergunte se a estratégia é dedutiva, indutiva ou mista.
 2. Proponha conceitos em lotes pequenos.
 3. Compare nomes e descrições para detectar sobreposição que o compilador não detecta.
-4. Passe pelo portão O.
-5. Grave, compile e mostre as mudanças.
+4. Se a hierarquia conceitual for aprovada, declare no template um campo `parent` opcional do tipo `CHAIN`, no escopo `ONTOLOGY`, e use na ontologia a forma `parent: filho -> pai`. Essa é uma relação taxonômica estrutural, não uma chain de evidência em `ITEM`.
+5. Não escreva `filho -> IS_A -> pai`: na hierarquia atual, cada par consecutivo da chain é interpretado como filho e pai. Não modele múltipla herança sem inspeção prévia da saída, pois o índice derivado representa um único pai imediato por conceito.
+6. Passe pelo portão O.
+7. Grave, compile e mostre as mudanças. Com JSON, confira `ontology.<conceito>.parent_chains` e `indices.hierarchy`.
 
 Conclusão da fase, todos os conceitos gravados têm definição aprovada e fronteiras de uso compreensíveis.
 
@@ -208,6 +211,7 @@ Conclusão da fase, todos os itens pertencem ao lote aprovado e as exceções es
 3. Exporte apenas após compilação limpa, salvo pedido explícito para diagnóstico com `--force`.
 4. Verifique no disco cada arquivo esperado.
 5. Compare contagens de fontes, itens, ontologias e chains com o que foi aprovado.
+6. Para cada campo `ORDERED`, confira no JSON uma entrada com índice numérico e a chave auxiliar `<campo>_label` correspondente.
 
 Conclusão da fase, a saída do comando, o código de retorno e os artefatos no disco foram conferidos.
 
@@ -276,7 +280,11 @@ As regras empíricas antigas foram testadas detalhadamente no Synesis 0.6.0. Ess
 
 Em 2026-08-07, o Synesis 0.11.0 foi instalado e verificado por execução. Passaram `--version`, ajuda geral, `compile --help`, `help-field`, `export-snippets`, compilação multiprojeto e 69 testes oficiais das áreas de dataset, descrição de campos, snippets e linkagem.
 
-A versão 0.10.0 introduziu datasets TOML com `INCLUDE DATASET`, `ON DATASET` e `CONTEXT FROM DATASET`. A versão 0.11.0 introduziu `synesis help-field`, `synesis export-snippets`, o erro `SYNESIS_E086` e a exibição padrão da estrutura e da resolução das ligações multiprojeto.
+Em 2026-08-24, a release oficial 0.12.0 foi verificada em ambiente temporário isolado. Foram confirmados `--version`, `help-field ORDERED`, `help-field ENUMERATED`, `export-snippets --help`, dois projetos mínimos e 96 testes upstream focados. Essa verificação não atualizou o executável principal, que permanecia na 0.11.0.
+
+A versão 0.10.0 introduziu datasets TOML com `INCLUDE DATASET`, `ON DATASET` e `CONTEXT FROM DATASET`. A versão 0.11.0 introduziu `synesis help-field`, `synesis export-snippets`, o erro `SYNESIS_E086` e a exibição padrão da estrutura e da resolução das ligações multiprojeto. A hierarquia explícita na ontologia, via campo especial `parent` do tipo `CHAIN`, já estava presente pelo menos na 0.11.0 e foi confirmada na 0.12.0. Ela não é uma novidade listada pela release 0.12.0.
+
+Na 0.12.0, a CLI oferece exportação para JSON, CSV, XLS e Alpaca JSONL. Não há opção nem exportador nativo para OWL, RDF, Turtle ou formatos equivalentes. Para um grafo computável, use a saída canônica e avalie `synesis-graph`. Uma conversão para vocabulários semânticos externos requer pipeline adicional e decisão metodológica explícita. A versão 0.12.0 tornou canônica a escrita de índices em `ORDERED`, introduziu `SYNESIS_E087` e `SYNESIS_E088`, agrupou diagnósticos repetidos na CLI e regularizou rótulos auxiliares no JSON.
 
 Use a versão atual disponível e confirme por execução antes de aplicar regras ao corpus. Preserve as observações históricas abaixo somente quando ainda forem reproduzidas na versão instalada.
 
@@ -287,6 +295,10 @@ Use a versão atual disponível e confirme por execução antes de aplicar regra
 - `VALUES` só se aplica a `ORDERED` e `ENUMERATED`. Nos outros oito tipos, a versão 0.11.0 emite `SYNESIS_E086`
 - `synesis help-field <TIPO>` deriva a matriz de propriedades do validador da versão instalada
 - `synesis export-snippets -o arquivo.code-snippets` gera 10 snippets de campo na versão 0.11.0
+- em `ORDERED`, o valor persistido é o índice. Um rótulo existente recebe `SYNESIS_E088`, que informa o índice a gravar
+- em `ENUMERATED`, valores de `VALUES` não usam `[N]`. O prefixo recebe `SYNESIS_E087` e deve ser removido, salvo quando a ordem justificar a mudança de tipo para `ORDERED`
+- índices de `ORDERED` chegam ao consumidor como inteiros e o JSON acrescenta `<campo>_label` ao valor declarado no template
+- a CLI agrupa uma mesma mensagem a partir de quatro ocorrências, mostra a contagem e amostra de locais. A compilação completa continua sendo a fonte para localizar cada correção
 - valores multilinha podem ser truncados sem aviso, mantenha cada valor em uma linha
 - chain sem seta pode ser descartada sem aviso
 - projeto sem chains não gera tabela de chains

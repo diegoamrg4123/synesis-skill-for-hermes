@@ -2,7 +2,7 @@
 
 ## Escopo desta referência
 
-As regras históricas abaixo foram consolidadas para o compilador 0.6.0. As mudanças de sintaxe e ajuda foram revistas contra o código oficial e a execução do Synesis 0.11.0 em 2026-08-07. Confirme a versão instalada quando houver diferença.
+As regras históricas abaixo foram consolidadas para o compilador 0.6.0. As mudanças de sintaxe e ajuda foram revistas contra o código oficial e a execução do Synesis 0.11.0 em 2026-08-07. A release 0.12.0 foi verificada em ambiente temporário isolado em 2026-08-24, com projetos mínimos para `SYNESIS_E087` e `SYNESIS_E088`, inspeção de JSON e 96 testes upstream focados. Confirme a versão instalada quando houver diferença.
 
 A prova final é a execução real de `compile --stats`.
 
@@ -158,6 +158,29 @@ END FIELD
 
 Cada valor precisa de descrição. Um valor sem descrição pode causar erro de sintaxe apresentado pelo `compile` como template não encontrado. Use `validate-template` para localizar o parse quebrado.
 
+Na versão 0.12.0, `ORDERED` e `ENUMERATED` têm formas distintas.
+
+- Em `ORDERED`, `[N] rótulo` declara a ordem e `N` é o dado persistido. Escreva `intensidade: 2`, não `intensidade: forte`.
+- Em `ENUMERATED`, o rótulo é o dado e não recebe prefixo. Escreva `confianca: alta`, sem `[3] alta` no `VALUES`.
+- Um rótulo existente em `ORDERED` produz `SYNESIS_E088` e informa o índice correto. Um rótulo inexistente continua como erro de valor `E029`.
+- Um `[N]` em `ENUMERATED` produz `SYNESIS_E087`. O erro é acumulável e aparece na compilação completa.
+- O reconhecimento sem diferença de caixa ou acento serve para informar o índice no `SYNESIS_E088`. Ele não autoriza a gravação do rótulo.
+- Na versão 0.12.0, `synesis export-snippets` gera `VALUES` com `[N]` para `ORDERED` e sem prefixo para `ENUMERATED`. Regenere snippets existentes, não os corrija à mão.
+
+## Migração de campos ORDERED e ENUMERATED na versão 0.12.0
+
+Faça a migração por projeto e mantenha uma cópia versionada antes da primeira alteração.
+
+1. Procure blocos `FIELD` dos tipos `ORDERED` e `ENUMERATED` no projeto inteiro.
+2. Em cada `ENUMERATED`, remova `[N]` do `VALUES`. Se a ordem fizer parte do método aprovado, apresente a mudança de tipo para `ORDERED` pelo portão T.
+3. Execute `synesis compile projeto.synp --stats`. Não use apenas `validate-template`, que verifica sintaxe e pode terminar sem reportar esses erros semânticos.
+4. Para cada `SYNESIS_E088`, confira o campo e o arquivo apontados. Troque somente a ocorrência diagnosticada pelo índice informado, como `aspect: 11`.
+5. Não faça substituição global de rótulos. Um mesmo termo pode aparecer em campos ou contextos diferentes.
+6. Recompile e inspecione o JSON. O campo `ORDERED` deve ser inteiro e deve ter a chave `<campo>_label` com o rótulo do template.
+7. Regenere os snippets do editor com `synesis export-snippets -o snippets/synesis.code-snippets`.
+
+Essa migração é mecânica apenas quando o diagnóstico, o campo e o índice já foram conferidos. Mudança de tipo, de ordem ou de rótulo altera o template e exige portão T.
+
 ## Datasets TOML
 
 O Synesis 0.10.0 adicionou datasets estruturados como origem de valores e contexto. O `.synp` inclui os arquivos.
@@ -299,6 +322,8 @@ synesis export-snippets -o snippets/synesis.code-snippets
 
 `check` e `validate-template` verificam sintaxe. Apenas `compile --stats` faz a validação semântica completa do projeto na versão 0.6.0.
 
+Na versão 0.12.0, a CLI agrupa mensagens idênticas quando há quatro ou mais ocorrências. O grupo informa a contagem, mostra uma amostra de três locais e registra quantos locais adicionais existem. Abaixo de quatro ocorrências, cada diagnóstico continua em linha própria. Leia a lista de locais do grupo antes de corrigir um padrão repetido.
+
 Exportação:
 
 ```bash
@@ -364,6 +389,8 @@ Correção mecânica pode ser executada. Correção que muda conceito, relação
 - aviso de código não definido pode aparecer duas vezes para uma ocorrência
 - `--strict` pode retornar código 1 mantendo o rótulo `[WARNING]`
 - erro semântico pode apontar para o início do bloco, não para a linha exata do campo
+- `SYNESIS_E087` indica `[N]` em `VALUES` de `ENUMERATED`. Remova o prefixo ou, após aprovação metodológica, use `ORDERED`
+- `SYNESIS_E088` indica rótulo em um campo `ORDERED`. Grave o índice apontado pelo diagnóstico
 
 ## Critérios de conclusão
 

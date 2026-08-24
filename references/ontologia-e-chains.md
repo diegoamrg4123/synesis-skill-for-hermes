@@ -84,6 +84,41 @@ Sinais para revisão:
 
 Esses sinais geram perguntas, não fusões automáticas.
 
+## Hierarquia conceitual explícita
+
+O Synesis 0.12.0 suporta uma hierarquia taxonômica dentro da ontologia. A capacidade já existia pelo menos na 0.11.0, portanto não é uma adição da release 0.12.0. Ela é distinta de uma chain anotada em um `ITEM`: não representa uma afirmação atribuída a uma fonte, mas uma decisão conceitual aprovada no portão O.
+
+Para usá-la, declare um campo opcional `parent` do tipo `CHAIN` no escopo `ONTOLOGY` do template. A forma canônica no `.syno` é uma chain simples, de filho para pai:
+
+```text
+FIELD parent TYPE CHAIN
+    SCOPE ONTOLOGY
+    ARITY >= 2
+END FIELD
+
+ONTOLOGY FIELDS
+    OPTIONAL parent
+END ONTOLOGY FIELDS
+```
+
+```text
+ONTOLOGY mamifero
+    description: Animal que amamenta filhotes.
+    parent: mamifero -> animal
+END ONTOLOGY
+```
+
+Não escreva `mamifero -> IS_A -> animal`. O linker trata cada par consecutivo como filho e pai, portanto essa escrita inseriria `IS_A` como nó intermediário. O parser também reconhece `parents`, `is_a` e `isa`, mas use `parent` como convenção documental do projeto.
+
+Após `synesis compile projeto.synp --json resultado.json`, confira dois níveis da saída:
+
+- `ontology.<conceito>.parent_chains` preserva a declaração.
+- `indices.hierarchy` materializa o mapeamento direto `filho -> pai`.
+
+O índice derivado comporta um único pai imediato por conceito. Não modele múltipla herança como se estivesse preservada no índice sem uma decisão explícita e inspeção do JSON gerado.
+
+Essa estrutura dá forma computável à taxonomia, mas não substitui as definições, os critérios de inclusão e exclusão, nem o portão O.
+
 ## Evolução segura
 
 ### Adicionar
@@ -155,7 +190,7 @@ O compilador verifica o nome da relação, não se a leitura é adequada.
 
 - descrição sem relação dirigida
 - associação incerta sem definição aceita
-- classificação taxonômica
+- classificação taxonômica no `ITEM`: se a taxonomia for aprovada, registre-a como `parent` no `ONTOLOGY`, não como evidência atribuída à fonte
 - relação inferida além do trecho
 - tentativa de ligar códigos apenas porque aparecem juntos
 

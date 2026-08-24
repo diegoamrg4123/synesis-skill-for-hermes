@@ -68,7 +68,7 @@ Para cada campo, confirme:
 - guideline
 - valores permitidos, se houver
 
-Não invente valores de ENUMERATED, ORDERED ou SCALE. Peça os rótulos, definições, ordem e intervalo.
+Não invente valores de ENUMERATED, ORDERED ou SCALE. Peça os rótulos, definições, ordem e intervalo. Para `ORDERED`, aprove também os índices que serão gravados no corpus. Para `ENUMERATED`, não use índices.
 
 ## Bloco D, bundles
 

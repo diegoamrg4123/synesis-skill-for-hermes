@@ -4,6 +4,24 @@ Este arquivo registra somente mudanças reais e comprovadas na branch `hermes/sk
 
 Não adicione entrada quando uma execução diária não encontrar alteração comprovada. Nesse caso, produza apenas relatório de execução sem commit.
 
+## 2026-08-24
+
+Cenário: confirmação da hierarquia ontológica e do limite de exportação semântica
+Hipótese: a habilidade podia confundir chains de evidência em `ITEM` com a relação taxonômica `parent` no `ONTOLOGY`, ou atribuir à 0.12.0 exportadores OWL/RDF inexistentes
+Evidência: inspeção do código oficial nas tags 0.11.0 e 0.12.0, projeto mínimo compilado no Synesis 0.12.0 com `parent: mamifero -> animal`, JSON contendo `parent_chains` e `indices.hierarchy`, e ajuda da CLI sem `--owl`, `--rdf` ou `--ttl`
+Arquivos alterados: SKILL, README, referência de ontologia e chains, testes de regressão e changelog
+Validações executadas: projeto mínimo compilado com JSON, testes de manutenção, validador da skill, executor de manutenção e `git diff --check`
+Resultado: skill 1.3.0 registra a hierarquia estrutural já presente ao menos na 0.11.0, preserva o portão O e delimita as exportações nativas a JSON, CSV, XLS e Alpaca JSONL
+Pendências humanas: decidir, em projeto futuro, se uma conversão para OWL/RDF é necessária e qual vocabulário semântico a orientará
+
+Cenário: atualização da skill para o Synesis 0.12.0
+Hipótese: a skill não registrava a forma canônica de `ORDERED`, `SYNESIS_E087`, `SYNESIS_E088`, agrupamento de diagnósticos e rótulos auxiliares no JSON
+Evidência: release oficial v0.12.0, execução isolada de projetos mínimos para `SYNESIS_E087` e `SYNESIS_E088`, inspeção do JSON e 96 testes upstream focados aprovados
+Arquivos alterados: SKILL, README, referências de sintaxe, ecossistema e decisões metodológicas, testes de regressão e changelog
+Validações executadas: checagens específicas do Synesis 0.12.0, testes de regressão locais, validador da skill, executor de manutenção, compilação Python e `git diff --check`
+Resultado: skill 1.2.0 documenta a migração por projeto, exige compilação semântica para os novos diagnósticos e separa a release verificada do executável principal ainda na 0.11.0
+Pendências humanas: atualizar o executável principal para 0.12.0 é decisão separada
+
 ## 2026-08-17
 
 Cenário: complemento da mudança de ecossistema após a liberação dos módulos do ecossistema no PyPI

@@ -6,7 +6,11 @@ A referência empírica detalhada antiga desta skill é o Synesis 0.6.0. Ela é 
 
 Em 2026-08-07, a versão 0.11.0 foi instalada com `uv tool install synesis==0.11.0`. Foram verificados `--version`, ajuda geral, `compile --help`, `help-field`, `export-snippets` e uma compilação multiprojeto. Também passaram 69 testes oficiais das áreas de dataset, descrição de campos, snippets e linkagem.
 
-A versão 0.10.0 introduziu datasets TOML e mudou a licença do compilador. A versão 0.11.0 acrescentou a referência executável de campos, snippets derivados, o erro `SYNESIS_E086` e a exibição da topologia multiprojeto.
+Em 2026-08-24, a release 0.12.0 foi instalada apenas em ambiente temporário isolado. Foram verificados `--version`, a ajuda de `ORDERED` e `ENUMERATED`, a ajuda de `export-snippets`, dois projetos mínimos e 96 testes upstream focados. O executável principal não foi atualizado nessa verificação e permanecia na 0.11.0.
+
+A versão 0.10.0 introduziu datasets TOML e mudou a licença do compilador. A versão 0.11.0 acrescentou a referência executável de campos, snippets derivados, o erro `SYNESIS_E086` e a exibição da topologia multiprojeto. A versão 0.12.0 fixou a forma canônica de `ORDERED`, adicionou os erros `SYNESIS_E087` e `SYNESIS_E088`, agrupou diagnósticos repetidos e corrigiu o enriquecimento de rótulos no JSON.
+
+As correções de infraestrutura da 0.12.0 não mudam a sintaxe do projeto. O teste de `SHARED` agora usa caminho externo adequado a cada sistema operacional e o job de segurança passou a usar Python 3.11 para executar `pip-audit`. Isso remove uma falha de CI em Linux e macOS e permite que a auditoria de dependências rode.
 
 A versão 0.7.0 corrigiu leitura fora da pasta do projeto, leitura sem limite de tamanho e injeção de fórmulas em CSV. Se a versão instalada for anterior, pare antes de processar projeto não confiável e proponha a atualização ao pesquisador.
 
@@ -81,6 +85,8 @@ synesis export-snippets -o snippets/synesis.code-snippets
 
 Na execução verificada, foram gerados dez snippets. O snippet de `CHAIN` continha `ARITY` e não continha `VALUES`. O arquivo gerado deve ser regenerado pelo compilador, não mantido por edição manual.
 
+Na versão 0.12.0, os snippets de `VALUES` distinguem os tipos. `ORDERED` recebe opções indexadas e `ENUMERATED` recebe opções sem `[N]`. Regenere qualquer arquivo criado por versão anterior depois de concluir a migração do template.
+
 ## Exportação
 
 ```bash
@@ -119,6 +125,10 @@ Com `--stats`, a versão 0.11.0 mostra tabela por membro com linha `TOTAL`, bloc
 ### JSON
 
 Use como saída canônica para inspeção programática. Ele inclui índices, frequências, fontes, itens, ontologias e triples.
+
+Na versão 0.12.0, um campo `ORDERED` chega ao JSON como índice inteiro e recebe a chave adicional `<campo>_label` com o rótulo declarado no `VALUES` do template. Por exemplo, `aspect: 2` recebe `aspect_label: medio`. A chave é adicionada somente a campos `ORDERED` conhecidos pelo template, não a contadores do exportador, valores `SCALE` ou campos `ENUMERATED`.
+
+Use o índice para filtros, agrupamentos e comparação. Use `<campo>_label` para apresentação. Se a chave auxiliar estiver ausente em um valor `ORDERED` válido, registre o caso e confira a versão do compilador, o template e o JSON exportado.
 
 ### CSV
 
@@ -307,6 +317,7 @@ Depois da instalação:
 - documentação do Synesis em https://synesis-lang.github.io/synesis-docs/pt/
 - compilador em https://github.com/synesis-lang/synesis
 - releases do compilador em https://github.com/synesis-lang/synesis/releases
+- release 0.12.0 em https://github.com/synesis-lang/synesis/releases/tag/v0.12.0
 - extensão Synesis para VS Code em https://github.com/synesis-lang/synesis-vscode
 - organização em https://github.com/synesis-lang
 - documentação do Hermes em https://hermes-agent.nousresearch.com/docs

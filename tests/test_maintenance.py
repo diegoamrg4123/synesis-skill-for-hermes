@@ -74,6 +74,7 @@ class MaintenanceRepositoryTests(unittest.TestCase):
         for text in (readme, ecosystem, skill, syntax):
             with self.subTest(document=text[:20]):
                 self.assertIn("0.11.0", text)
+                self.assertIn("0.12.0", text)
                 self.assertIn("0.6.0", text)
 
         for text in (readme, ecosystem):
@@ -81,19 +82,48 @@ class MaintenanceRepositoryTests(unittest.TestCase):
                 self.assertIn("0.10.0", text)
                 self.assertIn("0.7.0", text)
 
-    def test_skill_documents_011_language_reference(self) -> None:
+    def test_skill_documents_012_language_reference(self) -> None:
         skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        ecosystem = (ROOT / "references/ecossistema.md").read_text(encoding="utf-8")
         syntax = (ROOT / "references/sintaxe-e-validacao.md").read_text(
             encoding="utf-8"
         )
 
-        self.assertIn("version: 1.1.0", skill)
+        self.assertIn("version: 1.3.0", skill)
         for text in (skill, syntax):
             with self.subTest(document=text[:20]):
                 self.assertIn("synesis help-field", text)
                 self.assertIn("synesis export-snippets", text)
                 self.assertIn("SYNESIS_E086", text)
+                self.assertIn("SYNESIS_E087", text)
+                self.assertIn("SYNESIS_E088", text)
         self.assertIn("ORDERED` e `ENUMERATED", syntax)
+        self.assertIn("Migração de campos ORDERED", syntax)
+        self.assertIn("quatro ou mais ocorrências", syntax)
+        self.assertIn("<campo>_label", skill)
+        self.assertIn("<campo>_label", ecosystem)
+
+    def test_skill_documents_ontology_hierarchy_and_export_boundary(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+        ontology = (ROOT / "references/ontologia-e-chains.md").read_text(
+            encoding="utf-8"
+        )
+
+        for text in (readme, skill, ontology):
+            with self.subTest(document=text[:20]):
+                self.assertIn("parent", text)
+                self.assertIn("CHAIN", text)
+                self.assertIn("ONTOLOGY", text)
+                self.assertIn("0.12.0", text)
+
+        for marker in ("parent_chains", "indices.hierarchy", "filho -> pai"):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, ontology)
+
+        self.assertIn("OWL", skill)
+        self.assertIn("RDF", skill)
+        self.assertIn("não OWL ou RDF nativamente", readme)
 
     def test_skill_documents_dataset_and_multiproject_workflows(self) -> None:
         skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")
