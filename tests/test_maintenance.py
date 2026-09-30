@@ -89,7 +89,7 @@ class MaintenanceRepositoryTests(unittest.TestCase):
             encoding="utf-8"
         )
 
-        self.assertIn("version: 1.3.0", skill)
+        self.assertIn("version: 1.4.0", skill)
         for text in (skill, syntax):
             with self.subTest(document=text[:20]):
                 self.assertIn("synesis help-field", text)
@@ -172,6 +172,34 @@ class MaintenanceRepositoryTests(unittest.TestCase):
             "https://github.com/synesis-lang/synesis-graph",
             ecosystem,
         )
+
+    def test_coding_routes_have_a_dedicated_reference(self) -> None:
+        reference = ROOT / "references/codificacao-e-coder.md"
+        self.assertTrue(reference.is_file(), "referência das rotas ausente")
+        text = reference.read_text(encoding="utf-8")
+        for marker in (
+            "Rota básica",
+            "Rota híbrida",
+            "--prompt-only",
+            "Não existe importação automática",
+            "primeiro chunk",
+            "0.13.1",
+            "incorporate",
+            "Portão O",
+            "não foi validada ponta a ponta",
+        ):
+            with self.subTest(marker=marker):
+                self.assertIn(marker, text)
+
+        for relative in (
+            "SKILL.md",
+            "README.md",
+            "references/ecossistema.md",
+            "references/fluxos-hermes.md",
+        ):
+            with self.subTest(relative=relative):
+                document = (ROOT / relative).read_text(encoding="utf-8")
+                self.assertIn("references/codificacao-e-coder.md", document)
 
     def test_workflow_uses_read_only_permissions_and_pinned_actions(self) -> None:
         workflow = (ROOT / ".github/workflows/validate.yml").read_text(

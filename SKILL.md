@@ -1,6 +1,6 @@
 ---
 name: synesis
-version: 1.3.0
+version: 1.4.0
 description: Use no Synesis com controle humano e automação pelo Hermes.
 author: Diego Amorim Goulart e Hermes Agent
 license: MIT
@@ -128,6 +128,19 @@ Pergunte no começo do projeto e quando houver mudança de fase.
 
 O nível automatizado não suspende os portões T, O e A.
 
+## Rotas de codificação por IA
+
+O compilador Synesis funciona sem IA. Para codificar com assistência, carregue `references/codificacao-e-coder.md` e diferencie a rota técnica do nível de automação.
+
+- Rota básica, subagentes do Hermes geram e revisam conforme o template, com etapas semelhantes ao Coder, sem executar a ferramenta.
+- Rota híbrida, o Coder prepara prompts com `--prompt-only` e subagentes do Hermes respondem. Não há importação automática nem integração ponta a ponta já validada.
+- Rota nativa, o Coder usa um backend autorizado pelo pesquisador.
+- Rotas avançadas, proxy, servidor de API ou adaptador de agente ficam documentados, não configurados por padrão.
+
+Proponha a básica quando o pedido não exigir Coder. Proponha a híbrida quando o pesquisador quiser reaproveitá-lo. Confirme a rota antes do corpus, sem repetir uma escolha já aprovada. Subagentes usam a conexão resolvida pelo Hermes e consomem sua cota, não recebem acesso gratuito adicional. Não presuma que um backend local do Coder torne os subagentes locais.
+
+Derive campos e instruções do template aprovado. Preserve referências e citações, gere rascunhos separados, compile, revise com outro agente e submeta divergências ao pesquisador. Normalização, incorporação e refinamento não atravessam portões humanos.
+
 ## Fluxo de trabalho
 
 ### Fase 0, diagnóstico
@@ -197,10 +210,11 @@ Conclusão da fase, cada valor externo tem origem declarada, o contexto está no
 ### Fase 5, anotação
 
 1. Defina o lote e a unidade de análise já aprovada.
-2. Passe pelo portão A.
-3. Codifique somente o lote autorizado.
-4. Não crie conceito ou relação nova em silêncio. Mantenha propostas separadas até o portão correto.
-5. Recompile a cada lote e apresente amostras e distribuição de códigos.
+2. Confirme a rota com `references/codificacao-e-coder.md` e prepare o pacote de contexto.
+3. Passe pelo portão A.
+4. Codifique somente o lote autorizado em rascunhos separados.
+5. Não crie conceito ou relação nova em silêncio. Mantenha propostas separadas até o portão correto.
+6. Recompile a cada lote, faça revisão separada e apresente amostras e distribuição de códigos.
 
 Conclusão da fase, todos os itens pertencem ao lote aprovado e as exceções estão registradas.
 
@@ -341,11 +355,13 @@ Um caminho conservador pode preservar arquivos e gerar diagnóstico. Ele não po
 | `references/sintaxe-e-validacao.md` | Antes de escrever arquivos ou corrigir compilação |
 | `references/ontologia-e-chains.md` | Ao trabalhar com conceitos, definições e relações |
 | `references/fluxos-hermes.md` | Ao delegar codificação, revisão ou processamento em lote |
+| `references/codificacao-e-coder.md` | Ao escolher rotas de codificação, preparar prompts do Coder ou integrar respostas do Hermes |
 | `references/ecossistema.md` | Ao instalar, exportar ou integrar ferramentas externas |
 
 ## Verificação final
 
 - [ ] O nível de automação foi acordado
+- [ ] A rota de codificação, quando aplicável, foi acordada e seus limites foram registrados
 - [ ] Toda decisão metodológica tem aprovação ou pendência visível
 - [ ] Os portões aplicáveis foram respeitados
 - [ ] Nenhum subagente decidiu método

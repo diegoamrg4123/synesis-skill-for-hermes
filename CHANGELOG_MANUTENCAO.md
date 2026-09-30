@@ -1,8 +1,18 @@
 # Changelog de manutenção
 
-Este arquivo registra somente mudanças reais e comprovadas na branch `hermes/skill-improvement`.
+Este arquivo registra mudanças reais e comprovadas. A manutenção automática ocorre somente na branch `hermes/skill-improvement`. Atualizações solicitadas por Diego são identificadas como revisão humana, sem autorizar publicação automática.
 
 Não adicione entrada quando uma execução diária não encontrar alteração comprovada. Nesse caso, produza apenas relatório de execução sem commit.
+
+## 2026-09-30
+
+Cenário: revisão humana das rotas de codificação com Hermes e Synesis Coder
+Hipótese: a skill descrevia principalmente execução externa do Coder e não orientava a codificação direta ou a preparação de prompts com execução pelo Hermes
+Evidência: inspeção do código oficial do Coder 0.12.0, dependência Synesis 0.13.1, modos com `--prompt-only`, limites do dump, cliente de inferência e documentação atual do Hermes. O novo teste falhou por ausência da referência antes da atualização
+Arquivos alterados: SKILL, README, referências de ecossistema e fluxos, nova referência de codificação, testes de regressão e changelog
+Validações executadas: 11 testes de manutenção, `python3 scripts/validate_skill.py`, `python3 scripts/run_maintenance_tests.py` com descoberta em perfil temporário e `git diff --check`
+Resultado: skill 1.4.0 documenta rota básica e híbrida, preserva a rota nativa e deixa integrações avançadas sem configuração. A revisão separada, proveniência, normalização e incorporação mantêm os portões humanos
+Pendências humanas: autorizar ambiente compatível e piloto de inferência antes de tratar a integração híbrida como validada ponta a ponta. Nenhum pacote, serviço ou agendamento foi instalado ou alterado nesta revisão
 
 ## 2026-08-24
 

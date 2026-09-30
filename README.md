@@ -42,6 +42,7 @@ references/
     decisoes-metodologicas.md
     ecossistema.md
     fluxos-hermes.md
+    codificacao-e-coder.md
     ontologia-e-chains.md
     sintaxe-e-validacao.md
 scripts/
@@ -58,6 +59,19 @@ CHANGELOG_MANUTENCAO.md
 ```
 
 O `SKILL.md` contém o processo que deve estar disponível sempre. As referências são carregadas somente na fase correspondente.
+
+### Rotas de codificação
+
+A skill 1.4.0 oferece duas rotas principais documentadas em `references/codificacao-e-coder.md`.
+
+- Básica, subagentes do Hermes codificam e revisam segundo o template, com etapas semelhantes ao Coder, sem executar a ferramenta.
+- Híbrida, o Coder prepara prompts oficiais com `--prompt-only` e subagentes do Hermes respondem, com compilação e revisão posteriores.
+
+A rota híbrida é assistida, não uma integração ponta a ponta já validada. O dump não cobre todo lote ou documento e não importa respostas de volta automaticamente. A referência explica os limites de JSON, schema e montagem mecânica.
+
+O Coder nativo continua disponível quando o pesquisador autorizar backend e envio de dados. Proxy de assinatura, servidor de API do Hermes e backend de agente são opções avançadas somente documentadas. Não são instalados nem configurados pela escolha de uma rota básica.
+
+Synesis funciona sem IA. Subagentes usam a conexão resolvida pelo Hermes e consomem sua cota. Nenhuma rota suspende os portões T, O e A.
 
 Durante o desenvolvimento local, um `AGENTS.md` ignorado pelo Git pode registrar
 instruções para o agente que mantém a skill. Esse arquivo não faz parte da

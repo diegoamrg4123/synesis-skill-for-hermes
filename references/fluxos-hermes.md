@@ -164,17 +164,17 @@ Não invente conceitos, relações ou unidade de análise.
 
 ## `synesis-coder` e subagentes
 
-O `synesis-coder` é uma ferramenta externa de codificação por IA. Ele não é um subagente do Hermes. Quando estiver instalado e aprovado pelo pesquisador, o Hermes pode executar a ferramenta e depois delegar uma revisão independente.
+O `synesis-coder` é uma ferramenta externa, não um subagente do Hermes. Consulte `references/codificacao-e-coder.md` antes de escolher a rota. Ela documenta os contratos, etapas semelhantes ao ACT, preparação oficial de prompts e limites de integração.
 
-Fluxo recomendado:
+Rotas principais:
 
-1. confirmar custo, privacidade e envio do corpus ao provedor
-2. aprovar template, ontologia, guidelines e piloto
-3. executar `synesis-coder` num lote pequeno
-4. compilar a saída
-5. pedir revisão independente a um subagente
-6. apresentar amostra e divergências ao pesquisador
-7. ampliar o lote somente após aprovação
+- Básica, o principal prepara o contexto do template e delega geração e revisão, sem invocar Coder.
+- Híbrida, o Coder prepara o prompt com `--prompt-only` e o principal o confere antes de delegar a resposta. O dump não cobre automaticamente todos os registros ou chunks, nem inclui o schema como artefato separado.
+- Nativa, o Coder gera com backend autorizado e o principal delega uma revisão separada.
+
+Não prometa que responder ao dump retoma automaticamente o Coder. Sem montador estruturado testado, use DSL e compilação na rota básica ou registre bloqueio da variante JSON. Preserve o prompt original e complemente o contexto com os arquivos aprovados.
+
+Nas três rotas, confirme destino dos dados, obtenha as aprovações, compile rascunhos, revise contra as fontes e apresente divergências. Modelo e provedor dos subagentes são os resolvidos pelo Hermes, por herança ou configuração explícita. Verifique-os antes de afirmar custo ou privacidade. Dois agentes do mesmo modelo não garantem independência epistêmica.
 
 Não exponha credenciais ao chat ou ao subagente. Use o mecanismo local de configuração segura.
 
@@ -201,6 +201,7 @@ Delegações não são filas duráveis. Verifique quais arquivos foram realmente
 Ao final, registre:
 
 - agentes e papéis usados
+- rota básica, híbrida ou nativa e etapas efetivamente executadas
 - modelo ou provedor quando isso afetar reprodutibilidade
 - arquivos de entrada
 - arquivos de saída

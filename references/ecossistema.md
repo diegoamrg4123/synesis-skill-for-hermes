@@ -186,29 +186,15 @@ Na versão 0.10.0 ou posterior, `dataset_index` fornece registros já carregados
 
 ## `synesis-coder`
 
-Esta seção depende de confirmação local. Antes de prometer comandos, instale e leia `synesis-coder --help`.
+Consulte `references/codificacao-e-coder.md` para escolher entre subagentes diretos, preparação de prompts pelo Coder e execução nativa. Rotas avançadas ficam documentadas, não habilitadas por padrão.
 
-O uso envolve provedor de IA, custo e envio de corpus. Peça autorização do pesquisador antes de instalar, configurar ou executar.
+O compilador não exige IA. A geração nativa do Coder exige inferência, mas não necessariamente chave comercial, pois o backend compatível com OpenAI pode ser local. `--prompt-only` prepara prompts sem inferência e `incorporate` aplica revisões sem modelo. A geração por subagentes consome a conexão configurada no Hermes.
 
-Fluxo de controle:
+O Coder 0.8.0 foi a primeira versão publicada no PyPI, em 2026-08-11. O código oficial inspecionado em 2026-09-30 declara Coder 0.12.0 e exige `synesis>=0.13.1`. Essa inspeção não atualizou o compilador principal nem validou a integração híbrida com inferência real.
 
-1. aprovar template e guidelines
-2. aprovar ontologia ou estratégia de propostas
-3. aprovar dois ou três itens piloto
-4. executar lote pequeno
-5. compilar
-6. revisar com subagente separado
-7. apresentar amostra ao pesquisador
-8. ampliar após aprovação
+Antes de usar, confira versão e ajuda do modo instalado com `terminal`. Peça autorização antes de instalar, atualizar, configurar ou iniciar inferência. Confirme corpus, destino dos dados, custo e portões aplicáveis. Não instalar o Coder é uma opção válida da rota básica.
 
 Nunca digite ou exponha credenciais no chat. Use configuração segura local.
-
-O `synesis-coder` 0.8.0 foi a primeira versão publicada no PyPI, em 2026-08-11.
-Ele oferece os modos `item`, `abstract`, `document`, `dataset` e `ontology`. O
-modo `dataset` lê dados estruturados e gera anotações Synesis a partir deles.
-Antes de orientar o uso, instale o pacote e leia `synesis-coder --help` na
-versão instalada, porque o conjunto de comandos mudou quando o pacote foi
-publicado.
 
 ## `synesis-graph`
 
